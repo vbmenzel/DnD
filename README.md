@@ -1,6 +1,19 @@
 # Potential classes or Interfaces
 
 Character - abstract
+int HP (get, Private set)
+int Max HP (get, Private set)
+string Name (get, Private set)
+int Level (get, Private set)
+int xp (get, Private set)
+int AttackPower (get, Private set)
+
+
+
+
+
+
+
 
 Warrior : Character
 
