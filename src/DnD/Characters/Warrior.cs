@@ -1,22 +1,35 @@
-﻿using System;
+using DnD.Interfaces;
+
+namespace DnD.Characters;
 
 /// <summary>
-/// Summary description for Warrior
+/// Represents a warrior character.
 /// </summary>
-public class Warrior: Character
+public class Warrior : Character
 {
-
-	public Warrior(string name, int level, int maxHP, int baseAttack, int baseDefense) : base(name, level, maxHP, baseAttack, baseDefense)
-	{
-
-	}
-
-    public override void Attack(IDamageable target)
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Warrior"/> class.
+    /// </summary>
+    /// <param name="name">The warrior's name.</param>
+    /// <param name="level">The warrior's initial level.</param>
+    /// <param name="maxHealth">The warrior's maximum health points.</param>
+    /// <param name="baseAttack">The warrior's base attack value.</param>
+    /// <param name="baseDefense">The warrior's base defense value.</param>
+    public Warrior(
+        string name,
+        int level,
+        int maxHealth,
+        int baseAttack,
+        int baseDefense)
+        : base(name, level, maxHealth, baseAttack, baseDefense)
     {
-        int damage = BaseAttack //+ BonusDamage skal implementeres // Example damage calculation
-        if (damage < 0) damage = 0; // Ensure damage is not negative
-        target.TakeDamage(damage);
-        Console.WriteLine($"{Name} attacks {target} for {damage} damage!"); //overvej at skrive overkill eller noget hvis mm
     }
 
+    /// <inheritdoc />
+    public override void Attack(IDamageable target)
+    {
+        int damage = Math.Max(BaseAttack, 0);
+        target.TakeDamage(damage);
+        Console.WriteLine($"{Name} attacks {target} for {damage} damage!");
+    }
 }
