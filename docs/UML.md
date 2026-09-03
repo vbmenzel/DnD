@@ -35,12 +35,15 @@ Character <|-- Rogue
 
 class IDamageable {
     <<interface>>
+    +int CurrentHealth
+    +bool /IsDefeated
     +TakeDamage(int amount)
 }
 
 class ISpellcaster {
     <<interface>>
-    +CastSpell(Character target)
+    +int CurrentMana
+    +CastSpell(IDamageable target)
 }
 
 IDamageable <|.. Character
