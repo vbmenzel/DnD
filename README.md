@@ -2,13 +2,13 @@
 
 Character - abstract
 
-Warrior
+Warrior : Character
 
-Wizard
+Wizard : Character
 
-Rogue
+Rogue : Character
 
-Monster
+Monster : Character
 
 Party
 
