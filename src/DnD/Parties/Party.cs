@@ -1,4 +1,4 @@
-﻿namespace DnD.Party
+﻿namespace DnD.Parties
 {
 	// Party holder styr på gruppens Characters.
 	// Character kommer fra Person 1 og skal tilpasses,
