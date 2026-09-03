@@ -1,0 +1,5 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/DnD/DnD.csproj" />
+  </Folder>
+</Solution>
