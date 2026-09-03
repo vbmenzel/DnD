@@ -15,9 +15,13 @@ int xp (get, Private set)
 int AttackPower (get, Private set)
 
 public Attack(target: IDamageable)
+
 punlic TakeDamage(amount: int)
+
 public Heal(amount: int)
+
 internal AddstatusEffect(effect: StatusEffect)
+
 protected CalculatelncomingDamage(amount: int)
 
 
