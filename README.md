@@ -24,8 +24,7 @@ internal AddstatusEffect(effect: StatusEffect)
 
 protected CalculatelncomingDamage(amount: int)
 
-
-
+---
 
 
 Warrior : Character
@@ -35,6 +34,8 @@ Wizard : Character
 Rogue : Character
 
 Monster : Character
+
+---
 
 Party
 
