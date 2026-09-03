@@ -1,4 +1,7 @@
 ﻿using System;
+using DnD.Interfaces;
+
+namespace DnD.Characters;
 
 /// <summary>
 /// Summary description for Warrior
@@ -13,7 +16,7 @@ public class Warrior: Character
 
     public override void Attack(IDamageable target)
     {
-        int damage = BaseAttack //+ BonusDamage skal implementeres // Example damage calculation
+        int damage = BaseAttack; //+ BonusDamage skal implementeres // Example damage calculation
         if (damage < 0) damage = 0; // Ensure damage is not negative
         target.TakeDamage(damage);
         Console.WriteLine($"{Name} attacks {target} for {damage} damage!"); //overvej at skrive overkill eller noget hvis mm

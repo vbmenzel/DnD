@@ -1,4 +1,7 @@
 ﻿using System;
+using DnD.Interfaces;
+
+namespace DnD.Characters;
 
 /// <summary>
 /// Summary description for Rogue

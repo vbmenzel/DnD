@@ -1,9 +1,12 @@
 ﻿using System;
+using DnD.Interfaces;
+
+namespace DnD.Characters;
 
 /// <summary>
 /// Summary description for Wizard
 /// </summary>
-public class Wizard : Character, //ISpellcaster (skal implementeres senere)
+public class Wizard : Character //ISpellcaster (skal implementeres senere)
 {
 	public Wizard(string name, int level, int maxHP, int baseAttack, int baseDefense) : base(name, level, maxHP, baseAttack, baseDefense)
 	{
