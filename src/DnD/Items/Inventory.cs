@@ -4,7 +4,7 @@
 	// Listen er private, så items kun ændres gennem Inventory-metoderne.
 	public class Inventory
 	{
-		private List<Item> items = new();
+		private readonly List<Item> items = new();
 
 		public void AddItem(Item item)
 		{
@@ -18,7 +18,7 @@
 
 		public IReadOnlyList<Item> GetItems()
 		{
-			return items;
+			return items.AsReadOnly();
 		}
 	}
 }

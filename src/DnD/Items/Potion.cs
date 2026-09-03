@@ -10,7 +10,11 @@
 			HealAmount = healAmount;
 		}
 
-		// TODO: Tilføj Use(Character target), når Character fra Person 1 er merged.
-		// Use skal kalde target.Heal(HealAmount).
+		// Character kommer fra Person 1.
+		// Namespace/import skal tilpasses, når Character er merged.
+		public void Use(Character target)
+		{
+			target.Heal(HealAmount);
+		}
 	}
 }
