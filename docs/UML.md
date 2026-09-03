@@ -31,6 +31,7 @@ class Rogue {
 Character <|-- Warrior
 Character <|-- Wizard
 Character <|-- Rogue
+Character <|-- Monster
 
 
 class IDamageable {
@@ -47,15 +48,10 @@ class ISpellcaster {
 }
 
 IDamageable <|.. Character
-IDamageable <|.. Monster
 ISpellcaster <|.. Wizard
 
 
 class Monster {
-    +string Name
-    +int MaxHealth
-    +int CurrentHealth
-    +TakeDamage(int amount)
     +Attack(Character target)
 }
 
