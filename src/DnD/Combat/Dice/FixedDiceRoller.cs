@@ -1,3 +1,5 @@
+using DnD.Interfaces;
+
 namespace DnD.Combat.Dice;
 
 /// <summary>

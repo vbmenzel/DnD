@@ -1,4 +1,4 @@
-namespace DnD.Combat;
+namespace DnD.Interfaces;
 
 /// <summary>Defines the contract for entities that can take damage.</summary>
 public interface IDamageable

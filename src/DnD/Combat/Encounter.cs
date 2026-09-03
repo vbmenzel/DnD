@@ -1,5 +1,6 @@
 using DnD.Characters;
 using DnD.Combat.Dice;
+using DnD.Interfaces;
 
 namespace DnD.Combat;
 

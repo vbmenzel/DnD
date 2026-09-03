@@ -1,18 +1,22 @@
-﻿using System;
-using Interfaces;
-public abstract class Character: IDamageable
+﻿using DnD.Interfaces;
+
+namespace DnD.Characters;
+
+public abstract class Character : IDamageable
 {
-	public int HP { get; private set; }
-	public int MaxHP { get; private set; }
-	public string Name { get; private set; } = string.Empty;
-	public int Level { get; private set; }
+    public int HP { get; private set; }
+    public int MaxHP { get; private set; }
+    public string Name { get; private set; } = string.Empty;
+    public int Level { get; private set; }
     public int BaseDefense { get; private set; }
     public int Xp { get; private set; }
-	public int BaseAttack { get; private set; }
+    public int BaseAttack { get; private set; }
+
+    public int CurrentHealth => HP;
 
     public bool IsDefeated => CurrentHealth <= 0;
 
-    public abstract Character(string name, int level, int maxHP, int baseAttack, int baseDefense)
+    protected Character(string name, int level, int maxHP, int baseAttack, int baseDefense)
     {
         Name = name;
         Level = level;
@@ -24,7 +28,6 @@ public abstract class Character: IDamageable
     }
 
     public abstract void Attack(IDamageable target);
-
 
     public void TakeDamage(int amount)
     {
@@ -44,8 +47,4 @@ public abstract class Character: IDamageable
             HP = MaxHP;
         }
     }
-{
-
-
-
 }
