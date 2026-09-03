@@ -12,7 +12,7 @@ public abstract class Character: IDamageable
 
     public bool IsDefeated => CurrentHealth <= 0;
 
-    public abstract Character(string name, int level, int maxHP, int baseAttack, int baseDefense)
+    public Character(string name, int level, int maxHP, int baseAttack, int baseDefense)
     {
         Name = name;
         Level = level;
