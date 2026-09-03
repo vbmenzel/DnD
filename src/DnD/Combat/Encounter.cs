@@ -1,6 +1,7 @@
 using DnD.Characters;
 using DnD.Combat.Dice;
 using DnD.Interfaces;
+using DnD.Parties;
 
 namespace DnD.Combat;
 
@@ -61,11 +62,24 @@ public class Encounter
     }
 
     /// <summary>
-    /// Starts the encounter and continues the combat until either the party or all monsters have been defeated.
+    /// Starts the encounter and continues combat until either the party or all
+    /// monsters have been defeated.
     /// </summary>
     public void Start()
     {
-        throw new NotImplementedException();
+        while (!IsPartyDefeated() && !AreMonstersDefeated())
+        {
+            PlayerTurn();
+
+            if (AreMonstersDefeated())
+            {
+                break;
+            }
+
+            MonsterTurn();
+        }
+
+        DisplayResult();
     }
 
     /// <summary>
@@ -73,7 +87,18 @@ public class Encounter
     /// </summary>
     public void PlayerTurn()
     {
-        throw new NotImplementedException();
+        foreach (Character character in _party.GetMembers().Where(
+                     character => !character.IsDefeated))
+        {
+            Monster? target = GetFirstLivingMonster();
+
+            if (target is null)
+            {
+                return;
+            }
+
+            character.Attack(target);
+        }
     }
 
     /// <summary>
@@ -81,6 +106,75 @@ public class Encounter
     /// </summary>
     public void MonsterTurn()
     {
-        throw new NotImplementedException();
+        foreach (Monster monster in _monsters.Where(monster => !monster.IsDefeated))
+        {
+            Character? target = GetFirstLivingPartyMember();
+
+            if (target is null)
+            {
+                return;
+            }
+
+            monster.Attack(target);
+        }
+    }
+
+    /// <summary>
+    /// Determines whether every member of the party has been defeated.
+    /// </summary>
+    /// <returns>
+    /// <see langword="true"/> when no living party members remain; otherwise,
+    /// <see langword="false"/>.
+    /// </returns>
+    private bool IsPartyDefeated()
+    {
+        return _party.GetMembers().All(character => character.IsDefeated);
+    }
+
+    /// <summary>
+    /// Determines whether every monster in the encounter has been defeated.
+    /// </summary>
+    /// <returns>
+    /// <see langword="true"/> when no living monsters remain; otherwise,
+    /// <see langword="false"/>.
+    /// </returns>
+    private bool AreMonstersDefeated()
+    {
+        return _monsters.All(monster => monster.IsDefeated);
+    }
+
+    /// <summary>
+    /// Finds the first living monster in the encounter.
+    /// </summary>
+    /// <returns>
+    /// The first living monster, or <see langword="null"/> when none remain.
+    /// </returns>
+    private Monster? GetFirstLivingMonster()
+    {
+        return _monsters.FirstOrDefault(monster => !monster.IsDefeated);
+    }
+
+    /// <summary>
+    /// Finds the first living member of the party.
+    /// </summary>
+    /// <returns>
+    /// The first living party member, or <see langword="null"/> when none
+    /// remain.
+    /// </returns>
+    private Character? GetFirstLivingPartyMember()
+    {
+        return _party.GetMembers().FirstOrDefault(character => !character.IsDefeated);
+    }
+
+    /// <summary>
+    /// Displays the result of the encounter.
+    /// </summary>
+    private void DisplayResult()
+    {
+        string result = AreMonstersDefeated()
+            ? "The party won the encounter!"
+            : "The monsters won the encounter!";
+
+        Console.WriteLine(result);
     }
 }

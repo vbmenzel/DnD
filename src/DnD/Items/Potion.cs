@@ -1,4 +1,6 @@
-﻿namespace DnD.Items
+﻿using DnD.Characters;
+
+namespace DnD.Items
 {
 	public class Potion : Item
 	{
