@@ -65,6 +65,8 @@ public CurrentMana int - public getter private setter
 
 public CastSpell(target: IDamageable)
 
+---
+
 IDamageable
 
 ---
