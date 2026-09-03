@@ -14,15 +14,15 @@ int xp (get, Private set)
 
 int AttackPower (get, Private set)
 
-public Attack(target: IDamageable)
+public Attack(IDamageable target)
 
-punlic TakeDamage(amount: int)
+punlic TakeDamage(int amount)
 
-public Heal(amount: int)
+public Heal(int amount)
 
-internal AddstatusEffect(effect: StatusEffect)
+internal AddstatusEffect(StatusEffect effect)
 
-protected CalculatelncomingDamage(amount: int)
+protected CalculatelncomingDamage(int amount)
 
 ---
 
@@ -61,7 +61,7 @@ Potion : Item
 
 ISpellcaster
 
-public CurrentMana int - public getter private setter 
+public CurrentMana int
 
 public CastSpell(target: IDamageable)
 
@@ -69,8 +69,13 @@ public CastSpell(target: IDamageable)
 
 IDamageable
 
+public CurrentHealth int public
+public (derived)IsDefeated bool
+
 ---
 
 IDiceRoller
+
+public Roll(int sides)
 
 ---
