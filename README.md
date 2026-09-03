@@ -16,9 +16,9 @@ Encounter
 
 StatusEffect - abstract 
 
-PoisonEffect
+PoisonEffect : StatusEffect
 
-AttackBoostEffect
+AttackBoostEffect : StatusEffect
 
 ISpellcaster
 
@@ -28,8 +28,8 @@ IDiceRoller
 
 Item - abstract +
 
-Weapon
+Weapon : Item
 
-Armor
+Armor : Item
 
-Potion
+Potion : Item
