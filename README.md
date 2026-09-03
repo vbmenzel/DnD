@@ -1,6 +1,6 @@
 # Potential classes or Interfaces
 
-Character
+Character - abstract
 
 Warrior
 
@@ -14,7 +14,7 @@ Party
 
 Encounter
 
-StatusEffect
+StatusEffect - abstract 
 
 PoisonEffect
 
@@ -26,7 +26,7 @@ IDamageable
 
 IDiceRoller
 
-Item
+Item - abstract +
 
 Weapon
 
