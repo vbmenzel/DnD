@@ -47,12 +47,6 @@ PoisonEffect : StatusEffect
 
 AttackBoostEffect : StatusEffect
 
-ISpellcaster
-
-IDamageable
-
-IDiceRoller
-
 Item - abstract +
 
 Weapon : Item
@@ -60,3 +54,21 @@ Weapon : Item
 Armor : Item
 
 Potion : Item
+
+
+## Interfaces
+---
+
+ISpellcaster
+
+public CurrentMana int - public getter private setter 
+
+public CastSpell(target: IDamageable)
+
+IDamageable
+
+---
+
+IDiceRoller
+
+---
