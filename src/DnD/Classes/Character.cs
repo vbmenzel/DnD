@@ -2,16 +2,16 @@
 using Interfaces;
 public abstract class Character: IDamageable
 {
-	int HP { get; private set; }
-	int MaxHP { get; private set; }
-	string Name { get; private set; } = string.Empty;
-	int Level { get; private set; }
-	int Xp { get; private set; }
-	int AttackPower { get; private set; }
-    
+	public int HP { get; private set; }
+	public int MaxHP { get; private set; }
+	public string Name { get; private set; } = string.Empty;
+	public int Level { get; private set; }
+	public int Xp { get; private set; }
+	public int AttackPower { get; private set; }
 
+    public bool IsDefeated => CurrentHealth <= 0;
 
-	public abstract Character(string name, int level, int maxHP, int attackPower)
+    public abstract Character(string name, int level, int maxHP, int attackPower)
     {
         Name = name;
         Level = level;
@@ -23,9 +23,25 @@ public abstract class Character: IDamageable
 
     public abstract void Attack(IDamageable target);
 
-    public abstract void TakeDamage(int amount);
+    public void TakeDamage(int amount)
+    {
+        HP -= amount;
 
-    public abstract void Heal(int amount);
+        if (HP < 0)
+        {
+            HP = 0;
+        }
+    }
+
+    public void Heal(int amount)
+    {
+        HP += amount;
+        if (HP > MaxHP)
+        {
+            HP = MaxHP;
+        }
+    }
+{
 
 
 
