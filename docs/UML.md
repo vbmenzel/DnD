@@ -4,7 +4,7 @@
 classDiagram
 
 class Character {
-    <<abstract>>
+    <<Abstract>>
     +string Name
     +int Level
     +int MaxHealth
@@ -28,33 +28,30 @@ class Rogue {
     +Attack(Character target)
 }
 
-Character <|-- Warrior
-Character <|-- Wizard
-Character <|-- Rogue
-Character <|-- Monster
-
-
 class IDamageable {
-    <<interface>>
+    <<Interface>>
     +int CurrentHealth
-    +bool /IsDefeated
+    +bool IsDefeated
     +TakeDamage(int amount)
 }
 
 class ISpellcaster {
-    <<interface>>
+    <<Interface>>
     +int CurrentMana
     +CastSpell(IDamageable target)
 }
-
-IDamageable <|.. Character
-ISpellcaster <|.. Wizard
-
 
 class Monster {
     +Attack(Character target)
 }
 
+Character <|-- Warrior
+Character <|-- Wizard
+Character <|-- Rogue
+Character <|-- Monster
+
+Character ..|> IDamageable
+Wizard ..|> ISpellcaster
 
 class Party {
     -List~Character~ Members
@@ -62,11 +59,10 @@ class Party {
     +RemoveMember(Character character)
 }
 
-Party o-- Character : contains
-
+Party "0..1" o-- "0..*" Character : contains
 
 class Item {
-    <<abstract>>
+    <<Abstract>>
     +string Name
 }
 
@@ -87,8 +83,7 @@ Item <|-- Weapon
 Item <|-- Armor
 Item <|-- Potion
 
-Character *-- Item : inventory
-
+Character "1" *-- "0..*" Item : inventory
 
 class Encounter {
     -Party party
@@ -99,13 +94,12 @@ class Encounter {
     +MonsterTurn()
 }
 
-Encounter --> Party
-Encounter --> Monster
-Encounter --> IDiceRoller
-
+Encounter "0..*" --> "1" Party
+Encounter "0..1" --> "1..*" Monster
+Encounter "0..*" --> "1" IDiceRoller
 
 class IDiceRoller {
-    <<interface>>
+    <<Interface>>
     +Roll(int sides) int
 }
 
@@ -118,9 +112,8 @@ class FixedDiceRoller {
     +Roll(int sides) int
 }
 
-IDiceRoller <|.. RandomDiceRoller
-IDiceRoller <|.. FixedDiceRoller
-
+RandomDiceRoller ..|> IDiceRoller
+FixedDiceRoller ..|> IDiceRoller
 
 class CharacterIsDefeatedException {
     +CharacterIsDefeatedException(string message)
@@ -129,3 +122,4 @@ class CharacterIsDefeatedException {
 class InsufficientManaException {
     +InsufficientManaException(string message)
 }
+
