@@ -9,6 +9,8 @@ class Character {
     +int Level
     +int MaxHealth
     +int CurrentHealth
+    +int BaseDefense
+    +Inventory Inventory
     +TakeDamage(int amount)
     +Heal(int amount)
     +Attack(Character target)
@@ -61,6 +63,12 @@ class Party {
 
 Party "0..1" o-- "0..*" Character : contains
 
+class Inventory {
+    -List~Item~ Items
+    +AddItem(Item item)
+    +RemoveItem(Item item)
+}
+
 class Item {
     <<Abstract>>
     +string Name
@@ -83,7 +91,8 @@ Item <|-- Weapon
 Item <|-- Armor
 Item <|-- Potion
 
-Character "1" *-- "0..*" Item : inventory
+Character "1" *-- "1" Inventory : owns
+Inventory "1" o-- "0..*" Item : contains
 
 class Encounter {
     -Party party
@@ -123,3 +132,9 @@ class InsufficientManaException {
     +InsufficientManaException(string message)
 }
 
+```
+
+Character and Inventory use composition because the Inventory belongs to the
+Character and does not exist independently. Inventory and Item use aggregation
+because Items can exist independently and can be transferred between
+inventories.
