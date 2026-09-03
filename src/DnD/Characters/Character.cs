@@ -14,6 +14,7 @@ public abstract class Character : IDamageable
 
     public int CurrentHealth => HP;
 
+	// CurrentHealth doesn't exist
     public bool IsDefeated => CurrentHealth <= 0;
 
     protected Character(string name, int level, int maxHP, int baseAttack, int baseDefense)
