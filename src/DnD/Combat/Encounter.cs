@@ -15,9 +15,12 @@ namespace DnD.Combat;
 /// </remarks>
 public class Encounter
 {
+    private const int DefaultAttackDieSides = 20;
+
     private readonly Party _party;
     private readonly List<Monster> _monsters;
     private readonly IDiceRoller _diceRoller;
+    private readonly int _attackDieSides;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Encounter"/> class.
@@ -31,6 +34,9 @@ public class Encounter
     /// <param name="diceRoller">
     /// The dice roller used to determine random combat outcomes.
     /// </param>
+    /// <param name="attackDieSides">
+    /// The number of sides on the die used for attack rolls. The default is 20.
+    /// </param>
     /// <exception cref="ArgumentNullException">
     /// Thrown when <paramref name="party"/>,
     /// <paramref name="monsters"/>, or
@@ -43,7 +49,8 @@ public class Encounter
     public Encounter(
         Party party,
         IEnumerable<Monster> monsters,
-        IDiceRoller diceRoller)
+        IDiceRoller diceRoller,
+        int attackDieSides = DefaultAttackDieSides)
     {
         ArgumentNullException.ThrowIfNull(party);
         ArgumentNullException.ThrowIfNull(monsters);
@@ -52,6 +59,8 @@ public class Encounter
         _party = party;
         _monsters = monsters.ToList();
         _diceRoller = diceRoller;
+
+        _attackDieSides = attackDieSides;
 
         if (_monsters.Count == 0)
         {
@@ -97,7 +106,7 @@ public class Encounter
                 return;
             }
 
-            character.Attack(target);
+            ResolveAttack(character, target);
         }
     }
 
@@ -115,8 +124,34 @@ public class Encounter
                 return;
             }
 
-            monster.Attack(target);
+            ResolveAttack(monster, target);
         }
+    }
+
+    /// <summary>
+    /// Resolves an attack roll against the target's defense and applies the
+    /// attack when it hits.
+    /// </summary>
+    /// <param name="attacker">The character performing the attack.</param>
+    /// <param name="target">The character being attacked.</param>
+    private void ResolveAttack(Character attacker, Character target)
+    {
+        int roll = _diceRoller.Roll(_attackDieSides);
+        long attackScore = (long)roll + attacker.Level;
+        long defenseScore = (long)target.BaseDefense + target.Level;
+
+        // The die's maximum result is an automatic hit. For all other results,
+        // one misses and the remaining rolls compare attack and defense scores.
+        bool attackHits = roll == _attackDieSides ||
+            (roll != 1 && attackScore >= defenseScore);
+
+        if (attackHits)
+        {
+            attacker.Attack(target);
+            return;
+        }
+
+        Console.WriteLine($"{attacker.Name} missed {target.Name}.");
     }
 
     /// <summary>
