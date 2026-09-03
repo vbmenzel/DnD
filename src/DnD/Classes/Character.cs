@@ -10,8 +10,10 @@ public abstract class Character: IDamageable
     public int Xp { get; private set; }
 	public int BaseAttack { get; private set; }
 
+	// CurrentHealth doesn't exist
     public bool IsDefeated => CurrentHealth <= 0;
 
+	// This is an invalid Constructor, you can't have an abstract Constructor in C#
     public abstract Character(string name, int level, int maxHP, int baseAttack, int baseDefense)
     {
         Name = name;
