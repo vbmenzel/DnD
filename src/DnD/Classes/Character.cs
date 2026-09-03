@@ -10,9 +10,10 @@ public abstract class Character: IDamageable
     public int Xp { get; private set; }
 	public int BaseAttack { get; private set; }
 
+	// CurrentHealth doesn't exist
     public bool IsDefeated => CurrentHealth <= 0;
 
-    public Character(string name, int level, int maxHP, int baseAttack, int baseDefense)
+    public abstract Character(string name, int level, int maxHP, int baseAttack, int baseDefense)
     {
         Name = name;
         Level = level;
