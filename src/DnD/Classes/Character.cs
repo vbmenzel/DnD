@@ -6,22 +6,25 @@ public abstract class Character: IDamageable
 	public int MaxHP { get; private set; }
 	public string Name { get; private set; } = string.Empty;
 	public int Level { get; private set; }
-	public int Xp { get; private set; }
-	public int AttackPower { get; private set; }
+    public int BaseDefense { get; private set; }
+    public int Xp { get; private set; }
+	public int BaseAttack { get; private set; }
 
     public bool IsDefeated => CurrentHealth <= 0;
 
-    public abstract Character(string name, int level, int maxHP, int attackPower)
+    public abstract Character(string name, int level, int maxHP, int baseAttack, int baseDefense)
     {
         Name = name;
         Level = level;
         MaxHP = maxHP;
         HP = MaxHP;
         Xp = 0;
-        AttackPower = attackPower;
+        BaseAttack = baseAttack;
+        BaseDefense = baseDefense;
     }
 
     public abstract void Attack(IDamageable target);
+
 
     public void TakeDamage(int amount)
     {
