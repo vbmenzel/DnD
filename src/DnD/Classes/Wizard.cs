@@ -1,11 +1,13 @@
 ﻿using System;
+namespace DnD;
 
 /// <summary>
 /// Summary description for Wizard
 /// </summary>
 public class Wizard : Character, ISpellcaster
 {
-    int MaxMana { get; private set; }
+	public int MaxMana { get; private set; }
+	public int CurrentMana { get; private set; }
 	public Wizard(string name, int level, int maxHealth, int baseAttack, int baseDefense) : base(name, level, maxHealth , baseAttack, baseDefense)
 	{
 		MaxMana = 100; // Example maximum mana value

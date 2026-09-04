@@ -1,6 +1,7 @@
 ﻿using System;
-using Interfaces;
 using DnD.Items;
+namespace DnD;
+
 public abstract class Character: IDamageable
 {
 	public int CurrentHealth { get; private set; }
@@ -16,8 +17,8 @@ public abstract class Character: IDamageable
 	public bool IsDefeated => CurrentHealth <= 0;
 
 
-    public protected Character(string name, int level, int maxHealth, int baseAttack, int baseDefense)
-    {
+	protected Character(string name, int level, int maxHealth, int baseAttack, int baseDefense)
+	{
         Name = name;
         Level = level;
         MaxHealth = maxHealth;

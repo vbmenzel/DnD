@@ -1,4 +1,5 @@
 ﻿using System;
+namespace DnD; 
 
 public interface ISpellcaster
 {
