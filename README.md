@@ -1,5 +1,10 @@
 # Potential classes or Interfaces
 
+## Submission Documentation
+
+- [Final UML class diagram](docs/UML.md)
+- [Design decisions](docs/DesignDecisions.md)
+
 Character - abstract
 
 int HP (get, Private set)
