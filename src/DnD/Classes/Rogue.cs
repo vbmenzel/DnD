@@ -5,7 +5,7 @@
 /// </summary>
 public class Rogue : Character
 {
-    public Rogue(string name, int level, int maxHP, int baseAttack, int baseDefense) : base(name, level, maxHP, baseAttack, baseDefense)
+    public Rogue(string name, int level, int maxHealth, int baseAttack, int baseDefense) : base(name, level, maxHealth, baseAttack, baseDefense)
     {
 
     }

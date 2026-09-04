@@ -2,9 +2,8 @@
 using Interfaces;
 public abstract class Character: IDamageable
 {
-	// Either change the UML diagram to fit "HP" or change the fields to match the UML diagram - Side note IDamageable also requires "CurrentHealth"
-	public int HP { get; private set; }
-	public int MaxHP { get; private set; }
+	public int CurrentHealth { get; private set; }
+	public int MaxHealth { get; private set; }
 	public string Name { get; private set; } = string.Empty;
 	public int Level { get; private set; }
 	// Add these new fields to the UML diagram
@@ -12,17 +11,15 @@ public abstract class Character: IDamageable
     public int Xp { get; private set; }
 	public int BaseAttack { get; private set; }
 
-	// CurrentHealth doesn't exist, but according to the UML diagram it should
     public bool IsDefeated => CurrentHealth <= 0;
 
-	// I think you accidentally brought back the abstract constructor
-	// Might also be worth considering making it a protected constructor instead since outside code shouldn't be able to construct it anyway
-    public abstract Character(string name, int level, int maxHP, int baseAttack, int baseDefense)
+
+    public protected Character(string name, int level, int maxHealth, int baseAttack, int baseDefense)
     {
         Name = name;
         Level = level;
-        MaxHP = maxHP;
-        HP = MaxHP;
+        MaxHealth = maxHealth;
+        CurrentHealth = MaxHealth;
         Xp = 0;
         BaseAttack = baseAttack;
         BaseDefense = baseDefense;
@@ -35,20 +32,20 @@ public abstract class Character: IDamageable
 
     public void TakeDamage(int amount)
     {
-        HP -= amount;
+        CurrentHealth -= amount;
 
-        if (HP < 0)
+        if (CurrentHealth < 0)
         {
-            HP = 0;
+            CurrentHealth = 0;
         }
     }
 
     public void Heal(int amount)
     {
-        HP += amount;
-        if (HP > MaxHP)
+        CurrentHealth += amount;
+        if (CurrentHealth > MaxHealth)
         {
-            HP = MaxHP;
+            CurrentHealth = MaxHealth;
         }
     }
 }
