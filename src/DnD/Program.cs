@@ -2,7 +2,6 @@ using DnD.Characters;
 using DnD.Combat;
 using DnD.Combat.Dice;
 using DnD.Interfaces;
-using DnD.Items;
 using DnD.Parties;
 
 namespace DnD;
@@ -32,18 +31,11 @@ internal static class Program
     /// <returns>The configured party.</returns>
     private static Party CreateParty()
     {
+        // TODO: Replace the predefined party with interactive character creation.
         var party = new Party();
-        var warrior = new Warrior("Aric", 3, 35, 9, 7);
-        var rogue = new Rogue("Lyra", 3, 25, 7, 8);
-        var wizard = new Wizard("Mira", 3, 22, 8, 6);
-
-        warrior.Inventory.AddItem(new Potion("Healing potion", 10));
-        rogue.Inventory.AddItem(new Potion("Healing potion", 10));
-        wizard.Inventory.AddItem(new Potion("Healing potion", 10));
-
-        party.AddMember(warrior);
-        party.AddMember(rogue);
-        party.AddMember(wizard);
+        party.AddMember(new Warrior("Aric", 1, 35, 9, 7));
+        party.AddMember(new Rogue("Lyra", 1, 25, 7, 8));
+        party.AddMember(new Wizard("Mira", 1, 22, 8, 6));
 
         return party;
     }
