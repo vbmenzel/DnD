@@ -1,4 +1,5 @@
 ﻿using DnD.Interfaces;
+using DnD.Combat.Actions;
 
 namespace DnD.Characters;
 
@@ -29,6 +30,12 @@ public abstract class Character : IDamageable
     }
 
     public abstract void Attack(IDamageable target);
+
+    /// <summary>
+    /// Gets the combat actions currently available to this character.
+    /// </summary>
+    /// <returns>The available combat actions.</returns>
+    public abstract IReadOnlyList<CombatAction> GetCombatActions();
 
     public override string ToString()
     {

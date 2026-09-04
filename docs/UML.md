@@ -12,20 +12,22 @@ class Character {
     +TakeDamage(int amount)
     +Heal(int amount)
     +Attack(Character target)
+    +GetCombatActions() IReadOnlyList~CombatAction~
 }
 
 class Warrior {
     +Attack(Character target)
+    +GetCombatActions() IReadOnlyList~CombatAction~
 }
 
 class Wizard {
-    +int Mana
     +Attack(Character target)
-    +CastSpell(Character target)
+    +GetCombatActions() IReadOnlyList~CombatAction~
 }
 
 class Rogue {
     +Attack(Character target)
+    +GetCombatActions() IReadOnlyList~CombatAction~
 }
 
 class IDamageable {
@@ -43,6 +45,7 @@ class ISpellcaster {
 
 class Monster {
     +Attack(Character target)
+    +GetCombatActions() IReadOnlyList~CombatAction~
 }
 
 Character <|-- Warrior
@@ -51,7 +54,24 @@ Character <|-- Rogue
 Character <|-- Monster
 
 Character ..|> IDamageable
-Wizard ..|> ISpellcaster
+
+class CombatAction {
+    +string Name
+    +CombatTargetType TargetType
+    +bool RequiresAttackRoll
+    +int AttackRollModifier
+    +Execute(Character target)
+}
+
+class CombatTargetType {
+    <<enumeration>>
+    Enemy
+    Ally
+    Self
+}
+
+Character ..> CombatAction : exposes
+CombatAction --> CombatTargetType
 
 class Party {
     -List~Character~ Members
@@ -122,4 +142,3 @@ class CharacterIsDefeatedException {
 class InsufficientManaException {
     +InsufficientManaException(string message)
 }
-

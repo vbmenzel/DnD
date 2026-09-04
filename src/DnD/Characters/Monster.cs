@@ -1,4 +1,5 @@
 using DnD.Combat.Exceptions;
+using DnD.Combat.Actions;
 using DnD.Interfaces;
 
 namespace DnD.Characters;
@@ -46,5 +47,18 @@ public class Monster : Character
         int damage = Math.Max(BaseAttack, 0);
         target.TakeDamage(damage);
         Console.WriteLine($"{Name} attacks {target} for {damage} damage!");
+    }
+
+    /// <inheritdoc />
+    public override IReadOnlyList<CombatAction> GetCombatActions()
+    {
+        return
+        [
+            new CombatAction(
+                "Attack",
+                CombatTargetType.Enemy,
+                true,
+                target => Attack(target)),
+        ];
     }
 }
