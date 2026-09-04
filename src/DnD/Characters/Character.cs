@@ -6,6 +6,9 @@ namespace DnD.Characters;
 
 public abstract class Character : IDamageable
 {
+    private const int BaseExperienceRequirement = 100;
+    private const int ExperienceRequirementIncrease = 50;
+
     public int HP { get; private set; }
     public int MaxHP { get; private set; }
     public string Name { get; private set; } = string.Empty;
@@ -16,9 +19,13 @@ public abstract class Character : IDamageable
     public Inventory Inventory { get; } = new Inventory();
 
     public int CurrentHealth => HP;
+    public bool IsDefeated => HP <= 0;
 
-	// CurrentHealth doesn't exist
-    public bool IsDefeated => CurrentHealth <= 0;
+    /// <summary>
+    /// Gets the experience required to advance from the current level.
+    /// </summary>
+    public int ExperienceRequiredForNextLevel =>
+        BaseExperienceRequirement + ((Level - 1) * ExperienceRequirementIncrease);
 
     protected Character(string name, int level, int maxHP, int baseAttack, int baseDefense)
     {
@@ -99,6 +106,33 @@ public abstract class Character : IDamageable
         if (HP > MaxHP)
         {
             HP = MaxHP;
+        }
+    }
+
+    /// <summary>
+    /// Adds experience and applies every level gained from it.
+    /// </summary>
+    /// <param name="amount">The amount of experience to add.</param>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// Thrown when <paramref name="amount"/> is negative.
+    /// </exception>
+    public void GainExperience(int amount)
+    {
+        if (amount < 0)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(amount),
+                "Experience cannot be negative.");
+        }
+
+        Xp += amount;
+
+        while (Xp >= ExperienceRequiredForNextLevel)
+        {
+            Xp -= ExperienceRequiredForNextLevel;
+            Level++;
+
+            Console.WriteLine($"{Name} reached level {Level}!");
         }
     }
 }

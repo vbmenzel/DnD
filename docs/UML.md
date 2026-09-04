@@ -5,18 +5,22 @@ classDiagram
 
 class Character {
     <<Abstract>>
+    -int BaseExperienceRequirement
+    -int ExperienceRequirementIncrease
     +int HP
     +int MaxHP
     +string Name
     +int Level
     +int BaseDefense
     +int Xp
+    +int ExperienceRequiredForNextLevel
     +int BaseAttack
     +int CurrentHealth
     +bool IsDefeated
     +Inventory Inventory
     +TakeDamage(int amount)
     +Heal(int amount)
+    +GainExperience(int amount)
     +Attack(IDamageable target)
     +GetCombatActions() IReadOnlyList~CombatAction~
     #GetClassCombatActions() IReadOnlyList~CombatAction~
