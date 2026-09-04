@@ -1,8 +1,5 @@
 ﻿namespace DnD.Parties
 {
-	// Party holder styr på gruppens Characters.
-	// Character kommer fra Person 1 og skal tilpasses,
-	// hvis hans namespace eller klassenavn ændres.
 	public class Party
 	{
 		private readonly List<Character> members = new();
