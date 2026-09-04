@@ -59,6 +59,7 @@ internal sealed class Adventure
             EncounterResult result = encounter.Start();
 
             AwardExperience(result);
+            RestorePartyMana();
             AwardLoot(result);
 
             if (!result.PartyWon)
@@ -123,6 +124,36 @@ internal sealed class Adventure
         return _party.GetMembers()
             .Where(character => !character.IsDefeated)
             .ToList();
+    }
+
+    /// <summary>
+    /// Restores up to half of each living spellcaster's maximum mana between
+    /// encounters.
+    /// </summary>
+    private void RestorePartyMana()
+    {
+        foreach (Character character in GetLivingPartyMembers())
+        {
+            if (character is not ISpellcaster spellcaster)
+            {
+                continue;
+            }
+
+            int manaBeforeRestoration = spellcaster.CurrentMana;
+            int restorationAmount = spellcaster.MaxMana / 2;
+
+            spellcaster.RestoreMana(restorationAmount);
+
+            int restoredMana = spellcaster.CurrentMana - manaBeforeRestoration;
+
+            if (restoredMana == 0)
+            {
+                continue;
+            }
+
+            Console.WriteLine(
+                $"{character.Name} recovers {restoredMana} mana.");
+        }
     }
 
     /// <summary>

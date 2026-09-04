@@ -30,13 +30,18 @@ public class Wizard : Character, ISpellcaster
         int baseDefense)
         : base(name, level, maxHP, baseAttack, baseDefense)
     {
-        CurrentMana = BaseMana + (level * ManaPerLevel);
+        CurrentMana = MaxMana;
     }
 
     /// <summary>
     /// Gets the wizard's current mana points.
     /// </summary>
     public int CurrentMana { get; private set; }
+
+    /// <summary>
+    /// Gets the wizard's maximum mana points for the current level.
+    /// </summary>
+    public int MaxMana => BaseMana + (Level * ManaPerLevel);
 
     /// <summary>
     /// Attacks a target by casting the wizard's damaging spell.
@@ -54,12 +59,6 @@ public class Wizard : Character, ISpellcaster
     }
 
     /// <inheritdoc />
-    /// <exception cref="ArgumentNullException">
-    /// Thrown when <paramref name="target"/> is <see langword="null"/>.
-    /// </exception>
-    /// <exception cref="InsufficientManaException">
-    /// Thrown when the wizard does not have enough mana to cast the spell.
-    /// </exception>
     public void CastSpell(IDamageable target)
     {
         ArgumentNullException.ThrowIfNull(target);
@@ -79,6 +78,19 @@ public class Wizard : Character, ISpellcaster
         target.TakeDamage(damage);
         Console.WriteLine(
             $"{Name} casts a spell on {target} for {damage} damage!");
+    }
+
+    /// <inheritdoc />
+    public void RestoreMana(int amount)
+    {
+        if (amount < 0)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(amount),
+                "Mana restoration cannot be negative.");
+        }
+
+        CurrentMana = (int)Math.Min((long)CurrentMana + amount, MaxMana);
     }
 
     /// <inheritdoc />

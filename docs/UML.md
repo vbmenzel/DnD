@@ -42,8 +42,10 @@ class Wizard {
     -int SpellManaCost
     -int SpellDamageBonus
     +int CurrentMana
+    +int MaxMana
     +Attack(IDamageable target)
     +CastSpell(IDamageable target)
+    +RestoreMana(int amount)
     #GetClassCombatActions() IReadOnlyList~CombatAction~
     -StaffAttack(Character target)
 }
@@ -64,7 +66,9 @@ class IDamageable {
 class ISpellcaster {
     <<Interface>>
     +int CurrentMana
+    +int MaxMana
     +CastSpell(IDamageable target)
+    +RestoreMana(int amount)
 }
 
 class Monster {
@@ -201,6 +205,7 @@ class Adventure {
     +Start()
     -AwardExperience(EncounterResult result)
     -AwardLoot(EncounterResult result)
+    -RestorePartyMana()
     -CalculateExperienceReward(EncounterResult result) int
     -GetLivingPartyMembers() IReadOnlyList~Character~
 }
