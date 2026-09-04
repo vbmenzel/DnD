@@ -1,23 +1,54 @@
-﻿namespace DnD;
+using DnD.Characters;
+using DnD.Combat;
+using DnD.Combat.Dice;
+using DnD.Interfaces;
+using DnD.Parties;
 
-class Program
+namespace DnD;
+
+/// <summary>
+/// Provides the entry point for the application.
+/// </summary>
+internal static class Program
 {
-    static void Main(string[] args)
+    /// <summary>
+    /// Creates the combatants and starts a combat encounter.
+    /// </summary>
+    private static void Main()
     {
-        // Planned setup after all domain classes have been implemented:
-        //
-        // Create a dice roller.
-        // Create the playable characters and add them to a party.
-        // Create the monsters for the encounter.
-        // Create an encounter with the party, monsters, and dice roller.
-        //
-        // Start the encounter.
-        // While the party has living characters and the encounter has living monsters:
-        //     Execute one turn for every living party member.
-        //     If every monster has been defeated, end the encounter.
-        //     Execute one turn for every living monster.
-        // Display whether the party or the monsters won.
+        Party party = CreateParty();
+        IReadOnlyList<Monster> monsters = CreateMonsters();
+        IDiceRoller diceRoller = new RandomDiceRoller();
+        var encounter = new Encounter(party, monsters, diceRoller);
 
-        Console.WriteLine("Hello, World!");
+        Console.WriteLine("The encounter begins!");
+        encounter.Start();
+    }
+
+    /// <summary>
+    /// Creates the party participating in the demonstration encounter.
+    /// </summary>
+    /// <returns>The configured party.</returns>
+    private static Party CreateParty()
+    {
+        var party = new Party();
+        party.AddMember(new Warrior("Aric", 3, 35, 9, 7));
+        party.AddMember(new Rogue("Lyra", 3, 25, 7, 8));
+        party.AddMember(new Wizard("Mira", 3, 22, 8, 6));
+
+        return party;
+    }
+
+    /// <summary>
+    /// Creates the monsters participating in the demonstration encounter.
+    /// </summary>
+    /// <returns>The configured monsters.</returns>
+    private static IReadOnlyList<Monster> CreateMonsters()
+    {
+        return
+        [
+            new Monster("Goblin", 2, 16, 5, 5),
+            new Monster("Orc", 3, 28, 7, 7),
+        ];
     }
 }
