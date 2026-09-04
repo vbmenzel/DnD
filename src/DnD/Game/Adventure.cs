@@ -56,7 +56,9 @@ internal sealed class Adventure
             Console.WriteLine($"Encounter {encounterNumber} begins!");
             EncounterResult result = encounter.Start();
 
-            // TODO: Award XP and dropped items after every encounter.
+            AwardExperience(result);
+
+            // TODO: Award dropped items after every encounter.
 
             if (!result.PartyWon)
             {
@@ -68,4 +70,57 @@ internal sealed class Adventure
         }
     }
 
+    /// <summary>
+    /// Awards the defeated monsters' combined experience to every living
+    /// party member.
+    /// </summary>
+    /// <param name="result">The completed encounter's result.</param>
+    private void AwardExperience(EncounterResult result)
+    {
+        int experience = CalculateExperienceReward(result);
+
+        if (experience == 0)
+        {
+            return;
+        }
+
+        IReadOnlyList<Character> livingMembers = GetLivingPartyMembers();
+
+        if (livingMembers.Count == 0)
+        {
+            return;
+        }
+
+        Console.WriteLine(
+            $"The surviving party members gain {experience} XP each.");
+
+        // Giving every survivor the full reward keeps individual progression
+        // independent of the number of characters in the party.
+        foreach (Character character in livingMembers)
+        {
+            character.GainExperience(experience);
+        }
+    }
+
+    /// <summary>
+    /// Calculates the combined experience reward from defeated monsters.
+    /// </summary>
+    /// <param name="result">The completed encounter's result.</param>
+    /// <returns>The total experience reward for the encounter.</returns>
+    private static int CalculateExperienceReward(EncounterResult result)
+    {
+        return result.DefeatedMonsters.Sum(
+            monster => monster.ExperienceReward);
+    }
+
+    /// <summary>
+    /// Gets the party members eligible to receive encounter experience.
+    /// </summary>
+    /// <returns>The living members of the party.</returns>
+    private IReadOnlyList<Character> GetLivingPartyMembers()
+    {
+        return _party.GetMembers()
+            .Where(character => !character.IsDefeated)
+            .ToList();
+    }
 }

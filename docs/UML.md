@@ -59,6 +59,8 @@ class ISpellcaster {
 }
 
 class Monster {
+    -int ExperienceRewardPerLevel
+    +int ExperienceReward
     +Attack(IDamageable target)
     #GetClassCombatActions() IReadOnlyList~CombatAction~
 }
@@ -170,6 +172,9 @@ class Adventure {
     -Party _party
     -IDiceRoller _diceRoller
     +Start()
+    -AwardExperience(EncounterResult result)
+    -CalculateExperienceReward(EncounterResult result) int
+    -GetLivingPartyMembers() IReadOnlyList~Character~
 }
 
 Adventure --> Party

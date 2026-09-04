@@ -9,6 +9,13 @@ namespace DnD.Characters;
 /// </summary>
 public class Monster : Character
 {
+    private const int ExperienceRewardPerLevel = 25;
+
+    /// <summary>
+    /// Gets the experience awarded for defeating the monster.
+    /// </summary>
+    public int ExperienceReward { get; }
+
     /// <summary>
     /// Initializes a new instance of the <see cref="Monster"/> class.
     /// </summary>
@@ -25,6 +32,7 @@ public class Monster : Character
         int baseDefense)
         : base(name, level, maxHealth, baseAttack, baseDefense)
     {
+        ExperienceReward = Level * ExperienceRewardPerLevel;
     }
 
     /// <inheritdoc />
