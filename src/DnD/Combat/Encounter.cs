@@ -19,8 +19,7 @@ public class Encounter
 
     private readonly Party _party;
     private readonly List<Monster> _monsters;
-    private readonly IDiceRoller _diceRoller;
-    private readonly int _attackDieSides;
+    private readonly CombatActionResolver _actionResolver;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Encounter"/> class.
@@ -58,9 +57,7 @@ public class Encounter
 
         _party = party;
         _monsters = monsters.ToList();
-        _diceRoller = diceRoller;
-
-        _attackDieSides = attackDieSides;
+        _actionResolver = new CombatActionResolver(diceRoller, attackDieSides);
 
         if (_monsters.Count == 0)
         {
@@ -106,10 +103,10 @@ public class Encounter
                 return;
             }
 
-            CombatAction action = SelectCombatAction(character, actions);
+            CombatAction action = CombatConsole.SelectAction(character, actions);
             Character target = SelectTarget(character, action);
 
-            ResolveAction(character, action, target);
+            _actionResolver.Resolve(character, action, target);
         }
     }
 
@@ -128,46 +125,8 @@ public class Encounter
             }
 
             Character target = GetValidTargets(monster, action)[0];
-            ResolveAction(monster, action, target);
+            _actionResolver.Resolve(monster, action, target);
         }
-    }
-
-    /// <summary>
-    /// Resolves and executes a combat action against a selected target.
-    /// </summary>
-    /// <param name="attacker">The character performing the action.</param>
-    /// <param name="action">The combat action being performed.</param>
-    /// <param name="target">The character being attacked.</param>
-    private void ResolveAction(
-        Character attacker,
-        CombatAction action,
-        Character target)
-    {
-        if (!action.RequiresAttackRoll)
-        {
-            action.Execute(target);
-            DisplayDefeatIfNeeded(target);
-            return;
-        }
-
-        int roll = _diceRoller.Roll(_attackDieSides);
-        long attackScore = (long)roll + attacker.Level + action.AttackRollModifier;
-        long defenseScore = (long)target.BaseDefense + target.Level;
-
-        // The die's maximum result is an automatic hit. For all other results,
-        // one misses and the remaining rolls compare attack and defense scores.
-        bool attackHits = roll == _attackDieSides ||
-            (roll != 1 && attackScore >= defenseScore);
-
-        if (attackHits)
-        {
-            action.Execute(target);
-            DisplayDefeatIfNeeded(target);
-            return;
-        }
-
-        Console.WriteLine(
-            $"{attacker.Name} missed {target.Name} with {action.Name}.");
     }
 
     /// <summary>
@@ -180,29 +139,6 @@ public class Encounter
         return character.GetCombatActions()
             .Where(action => GetValidTargets(character, action).Count > 0)
             .ToList();
-    }
-
-    /// <summary>
-    /// Prompts the player to select one of a character's available actions.
-    /// </summary>
-    /// <param name="character">The character taking a turn.</param>
-    /// <param name="actions">The actions available to the character.</param>
-    /// <returns>The selected combat action.</returns>
-    private static CombatAction SelectCombatAction(
-        Character character,
-        IReadOnlyList<CombatAction> actions)
-    {
-        Console.WriteLine();
-        Console.WriteLine(
-            $"{character.Name}'s turn ({character.HP}/{character.MaxHP} HP):");
-
-        for (int index = 0; index < actions.Count; index++)
-        {
-            Console.WriteLine($"{index + 1}. {actions[index].Name}");
-        }
-
-        int selectedIndex = ReadSelection(actions.Count);
-        return actions[selectedIndex];
     }
 
     /// <summary>
@@ -220,17 +156,7 @@ public class Encounter
             return actor;
         }
 
-        Console.WriteLine("Choose a target:");
-
-        for (int index = 0; index < targets.Count; index++)
-        {
-            Character target = targets[index];
-            Console.WriteLine(
-                $"{index + 1}. {target.Name} ({target.HP}/{target.MaxHP} HP)");
-        }
-
-        int selectedIndex = ReadSelection(targets.Count);
-        return targets[selectedIndex];
+        return CombatConsole.SelectTarget(targets);
     }
 
     /// <summary>
@@ -261,46 +187,6 @@ public class Encounter
         return targets
             .Where(target => !target.IsDefeated && action.CanTarget(target))
             .ToList();
-    }
-
-    /// <summary>
-    /// Reads a one-based menu selection from the console.
-    /// </summary>
-    /// <param name="optionCount">The number of available menu options.</param>
-    /// <returns>The selected option's zero-based index.</returns>
-    /// <exception cref="InvalidOperationException">
-    /// Thrown when the standard input stream is closed.
-    /// </exception>
-    private static int ReadSelection(int optionCount)
-    {
-        while (true)
-        {
-            Console.Write("> ");
-            string input = Console.ReadLine()
-                ?? throw new InvalidOperationException(
-                    "Cannot select a combat action because input is unavailable.");
-
-            if (int.TryParse(input, out int selection) &&
-                selection >= 1 &&
-                selection <= optionCount)
-            {
-                return selection - 1;
-            }
-
-            Console.WriteLine($"Enter a number between 1 and {optionCount}.");
-        }
-    }
-
-    /// <summary>
-    /// Displays a message when an action defeats its target.
-    /// </summary>
-    /// <param name="target">The target affected by the action.</param>
-    private static void DisplayDefeatIfNeeded(Character target)
-    {
-        if (target.IsDefeated)
-        {
-            Console.WriteLine($"{target} has been defeated!");
-        }
     }
 
     /// <summary>

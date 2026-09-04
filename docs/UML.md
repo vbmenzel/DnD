@@ -129,8 +129,7 @@ Inventory "1" o-- "0..*" Item : contains
 class Encounter {
     -Party _party
     -List~Monster~ _monsters
-    -IDiceRoller _diceRoller
-    -int _attackDieSides
+    -CombatActionResolver _actionResolver
     +Start()
     +PlayerTurn()
     +MonsterTurn()
@@ -138,7 +137,22 @@ class Encounter {
 
 Encounter "0..*" --> "1" Party
 Encounter "0..1" --> "1..*" Monster
-Encounter "0..*" --> "1" IDiceRoller
+Encounter --> CombatActionResolver
+
+class CombatActionResolver {
+    -IDiceRoller _diceRoller
+    -int _attackDieSides
+    +Resolve(Character attacker, CombatAction action, Character target)
+}
+
+class CombatConsole {
+    <<static>>
+    +SelectAction(Character character, IReadOnlyList~CombatAction~ actions) CombatAction
+    +SelectTarget(IReadOnlyList~Character~ targets) Character
+}
+
+Encounter ..> CombatConsole
+CombatActionResolver --> IDiceRoller
 
 class IDiceRoller {
     <<Interface>>
