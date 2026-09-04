@@ -154,6 +154,17 @@ class CombatConsole {
 Encounter ..> CombatConsole
 CombatActionResolver --> IDiceRoller
 
+class Adventure {
+    -Party _party
+    -IDiceRoller _diceRoller
+    +Start()
+}
+
+Adventure --> Party
+Adventure --> IDiceRoller
+Adventure ..> Encounter : creates
+Adventure ..> Monster : creates
+
 class IDiceRoller {
     <<Interface>>
     +Roll(int sides) int

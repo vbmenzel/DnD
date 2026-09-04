@@ -1,6 +1,6 @@
 using DnD.Characters;
-using DnD.Combat;
 using DnD.Combat.Dice;
+using DnD.Game;
 using DnD.Interfaces;
 using DnD.Parties;
 
@@ -12,17 +12,15 @@ namespace DnD;
 internal static class Program
 {
     /// <summary>
-    /// Creates the combatants and starts a combat encounter.
+    /// Creates the party and starts the adventure.
     /// </summary>
     private static void Main()
     {
         Party party = CreateParty();
-        IReadOnlyList<Monster> monsters = CreateMonsters();
         IDiceRoller diceRoller = new RandomDiceRoller();
-        var encounter = new Encounter(party, monsters, diceRoller);
+        var adventure = new Adventure(party, diceRoller);
 
-        Console.WriteLine("The encounter begins!");
-        encounter.Start();
+        adventure.Start();
     }
 
     /// <summary>
@@ -32,24 +30,12 @@ internal static class Program
     private static Party CreateParty()
     {
         // TODO: Replace the predefined party with interactive character creation.
+        // New characters have zero XP and empty inventories.
         var party = new Party();
         party.AddMember(new Warrior("Aric", 1, 35, 9, 7));
         party.AddMember(new Rogue("Lyra", 1, 25, 7, 8));
         party.AddMember(new Wizard("Mira", 1, 22, 8, 6));
 
         return party;
-    }
-
-    /// <summary>
-    /// Creates the monsters participating in the demonstration encounter.
-    /// </summary>
-    /// <returns>The configured monsters.</returns>
-    private static IReadOnlyList<Monster> CreateMonsters()
-    {
-        return
-        [
-            new Monster("Goblin", 2, 16, 5, 5),
-            new Monster("Orc", 3, 28, 7, 7),
-        ];
     }
 }
