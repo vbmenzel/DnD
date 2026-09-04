@@ -37,8 +37,15 @@ class Warrior {
 }
 
 class Wizard {
+    -int BaseMana
+    -int ManaPerLevel
+    -int SpellManaCost
+    -int SpellDamageBonus
+    +int CurrentMana
     +Attack(IDamageable target)
+    +CastSpell(IDamageable target)
     #GetClassCombatActions() IReadOnlyList~CombatAction~
+    -StaffAttack(Character target)
 }
 
 class Rogue {
@@ -73,6 +80,8 @@ Character <|-- Rogue
 Character <|-- Monster
 
 Character ..|> IDamageable
+Wizard ..|> ISpellcaster
+Wizard ..> InsufficientManaException : throws
 
 class CombatAction {
     +string Name
@@ -182,6 +191,7 @@ class CombatConsole {
 }
 
 Encounter ..> CombatConsole
+CombatConsole ..> ISpellcaster
 CombatActionResolver --> IDiceRoller
 CombatActionResolver ..> CharacterIsDefeatedException : throws
 

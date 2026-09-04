@@ -1,5 +1,6 @@
 using DnD.Characters;
 using DnD.Combat.Actions;
+using DnD.Interfaces;
 
 namespace DnD.Combat;
 
@@ -18,9 +19,13 @@ internal static class CombatConsole
         Character character,
         IReadOnlyList<CombatAction> actions)
     {
+        string manaStatus = character is ISpellcaster spellcaster
+            ? $", {spellcaster.CurrentMana} mana"
+            : string.Empty;
+
         Console.WriteLine();
         Console.WriteLine(
-            $"{character.Name}'s turn ({character.HP}/{character.MaxHP} HP):");
+            $"{character.Name}'s turn ({character.HP}/{character.MaxHP} HP{manaStatus}):");
 
         for (int index = 0; index < actions.Count; index++)
         {
