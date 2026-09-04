@@ -1,4 +1,5 @@
 using DnD.Characters;
+using DnD.Combat.Actions;
 using DnD.Combat.Dice;
 using DnD.Interfaces;
 using DnD.Parties;
@@ -99,14 +100,17 @@ public class Encounter
         foreach (Character character in _party.GetMembers().Where(
                      character => !character.IsDefeated))
         {
-            Monster? target = GetFirstLivingMonster();
+            IReadOnlyList<CombatAction> actions = GetUsableActions(character);
 
-            if (target is null)
+            if (actions.Count == 0)
             {
                 return;
             }
 
-            ResolveAttack(character, target);
+            CombatAction action = SelectCombatAction(character, actions);
+            Character target = SelectTarget(character, action);
+
+            ResolveAction(character, action, target);
         }
     }
 
@@ -117,27 +121,38 @@ public class Encounter
     {
         foreach (Monster monster in _monsters.Where(monster => !monster.IsDefeated))
         {
-            Character? target = GetFirstLivingPartyMember();
+            CombatAction? action = GetUsableActions(monster).FirstOrDefault();
 
-            if (target is null)
+            if (action is null)
             {
                 return;
             }
 
-            ResolveAttack(monster, target);
+            Character target = GetValidTargets(monster, action)[0];
+            ResolveAction(monster, action, target);
         }
     }
 
     /// <summary>
-    /// Resolves an attack roll against the target's defense and applies the
-    /// attack when it hits.
+    /// Resolves and executes a combat action against a selected target.
     /// </summary>
-    /// <param name="attacker">The character performing the attack.</param>
+    /// <param name="attacker">The character performing the action.</param>
+    /// <param name="action">The combat action being performed.</param>
     /// <param name="target">The character being attacked.</param>
-    private void ResolveAttack(Character attacker, Character target)
+    private void ResolveAction(
+        Character attacker,
+        CombatAction action,
+        Character target)
     {
+        if (!action.RequiresAttackRoll)
+        {
+            action.Execute(target);
+            DisplayDefeatIfNeeded(target);
+            return;
+        }
+
         int roll = _diceRoller.Roll(_attackDieSides);
-        long attackScore = (long)roll + attacker.Level;
+        long attackScore = (long)roll + attacker.Level + action.AttackRollModifier;
         long defenseScore = (long)target.BaseDefense + target.Level;
 
         // The die's maximum result is an automatic hit. For all other results,
@@ -147,17 +162,146 @@ public class Encounter
 
         if (attackHits)
         {
-            attacker.Attack(target);
-
-            if (target.IsDefeated)
-            {
-                Console.WriteLine($"{target} has been defeated!");
-            }
-
+            action.Execute(target);
+            DisplayDefeatIfNeeded(target);
             return;
         }
 
-        Console.WriteLine($"{attacker.Name} missed {target.Name}.");
+        Console.WriteLine(
+            $"{attacker.Name} missed {target.Name} with {action.Name}.");
+    }
+
+    /// <summary>
+    /// Gets the actions that currently have at least one valid target.
+    /// </summary>
+    /// <param name="character">The character whose actions are requested.</param>
+    /// <returns>The actions that the character can currently perform.</returns>
+    private IReadOnlyList<CombatAction> GetUsableActions(Character character)
+    {
+        return character.GetCombatActions()
+            .Where(action => GetValidTargets(character, action).Count > 0)
+            .ToList();
+    }
+
+    /// <summary>
+    /// Prompts the player to select one of a character's available actions.
+    /// </summary>
+    /// <param name="character">The character taking a turn.</param>
+    /// <param name="actions">The actions available to the character.</param>
+    /// <returns>The selected combat action.</returns>
+    private static CombatAction SelectCombatAction(
+        Character character,
+        IReadOnlyList<CombatAction> actions)
+    {
+        Console.WriteLine();
+        Console.WriteLine(
+            $"{character.Name}'s turn ({character.HP}/{character.MaxHP} HP):");
+
+        for (int index = 0; index < actions.Count; index++)
+        {
+            Console.WriteLine($"{index + 1}. {actions[index].Name}");
+        }
+
+        int selectedIndex = ReadSelection(actions.Count);
+        return actions[selectedIndex];
+    }
+
+    /// <summary>
+    /// Prompts the player to select a valid target for an action.
+    /// </summary>
+    /// <param name="actor">The character performing the action.</param>
+    /// <param name="action">The selected combat action.</param>
+    /// <returns>The selected target.</returns>
+    private Character SelectTarget(Character actor, CombatAction action)
+    {
+        IReadOnlyList<Character> targets = GetValidTargets(actor, action);
+
+        if (action.TargetType == CombatTargetType.Self)
+        {
+            return actor;
+        }
+
+        Console.WriteLine("Choose a target:");
+
+        for (int index = 0; index < targets.Count; index++)
+        {
+            Character target = targets[index];
+            Console.WriteLine(
+                $"{index + 1}. {target.Name} ({target.HP}/{target.MaxHP} HP)");
+        }
+
+        int selectedIndex = ReadSelection(targets.Count);
+        return targets[selectedIndex];
+    }
+
+    /// <summary>
+    /// Gets the valid targets for an action performed by a character.
+    /// </summary>
+    /// <param name="actor">The character performing the action.</param>
+    /// <param name="action">The action whose targets are requested.</param>
+    /// <returns>The living characters accepted by the action.</returns>
+    private IReadOnlyList<Character> GetValidTargets(
+        Character actor,
+        CombatAction action)
+    {
+        bool actorIsMonster = actor is Monster monster && _monsters.Contains(monster);
+
+        IEnumerable<Character> targets = action.TargetType switch
+        {
+            CombatTargetType.Enemy => actorIsMonster
+                ? _party.GetMembers()
+                : _monsters,
+            CombatTargetType.Ally => actorIsMonster
+                ? _monsters
+                : _party.GetMembers(),
+            CombatTargetType.Self => [actor],
+            _ => throw new InvalidOperationException(
+                "The combat action has an unsupported target type."),
+        };
+
+        return targets
+            .Where(target => !target.IsDefeated && action.CanTarget(target))
+            .ToList();
+    }
+
+    /// <summary>
+    /// Reads a one-based menu selection from the console.
+    /// </summary>
+    /// <param name="optionCount">The number of available menu options.</param>
+    /// <returns>The selected option's zero-based index.</returns>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown when the standard input stream is closed.
+    /// </exception>
+    private static int ReadSelection(int optionCount)
+    {
+        while (true)
+        {
+            Console.Write("> ");
+            string input = Console.ReadLine()
+                ?? throw new InvalidOperationException(
+                    "Cannot select a combat action because input is unavailable.");
+
+            if (int.TryParse(input, out int selection) &&
+                selection >= 1 &&
+                selection <= optionCount)
+            {
+                return selection - 1;
+            }
+
+            Console.WriteLine($"Enter a number between 1 and {optionCount}.");
+        }
+    }
+
+    /// <summary>
+    /// Displays a message when an action defeats its target.
+    /// </summary>
+    /// <param name="target">The target affected by the action.</param>
+    private static void DisplayDefeatIfNeeded(Character target)
+    {
+        if (target.IsDefeated)
+        {
+            Console.WriteLine($"{target} has been defeated!");
+        }
     }
 
     /// <summary>
@@ -182,29 +326,6 @@ public class Encounter
     private bool AreMonstersDefeated()
     {
         return _monsters.All(monster => monster.IsDefeated);
-    }
-
-    /// <summary>
-    /// Finds the first living monster in the encounter.
-    /// </summary>
-    /// <returns>
-    /// The first living monster, or <see langword="null"/> when none remain.
-    /// </returns>
-    private Monster? GetFirstLivingMonster()
-    {
-        return _monsters.FirstOrDefault(monster => !monster.IsDefeated);
-    }
-
-    /// <summary>
-    /// Finds the first living member of the party.
-    /// </summary>
-    /// <returns>
-    /// The first living party member, or <see langword="null"/> when none
-    /// remain.
-    /// </returns>
-    private Character? GetFirstLivingPartyMember()
-    {
-        return _party.GetMembers().FirstOrDefault(character => !character.IsDefeated);
     }
 
     /// <summary>
