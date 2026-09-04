@@ -5,31 +5,38 @@ classDiagram
 
 class Character {
     <<Abstract>>
+    +int HP
+    +int MaxHP
     +string Name
     +int Level
-    +int MaxHealth
+    +int BaseDefense
+    +int Xp
+    +int BaseAttack
     +int CurrentHealth
+    +bool IsDefeated
     +Inventory Inventory
     +TakeDamage(int amount)
     +Heal(int amount)
-    +Attack(Character target)
+    +Attack(IDamageable target)
     +GetCombatActions() IReadOnlyList~CombatAction~
     #GetClassCombatActions() IReadOnlyList~CombatAction~
+    -UsePotion(Potion potion, Character target)
+    +ToString() string
 }
 
 class Warrior {
-    +Attack(Character target)
+    +Attack(IDamageable target)
     #GetClassCombatActions() IReadOnlyList~CombatAction~
     -HeavyAttack(Character target)
 }
 
 class Wizard {
-    +Attack(Character target)
+    +Attack(IDamageable target)
     #GetClassCombatActions() IReadOnlyList~CombatAction~
 }
 
 class Rogue {
-    +Attack(Character target)
+    +Attack(IDamageable target)
     #GetClassCombatActions() IReadOnlyList~CombatAction~
     -SneakAttack(Character target)
 }
@@ -48,7 +55,7 @@ class ISpellcaster {
 }
 
 class Monster {
-    +Attack(Character target)
+    +Attack(IDamageable target)
     #GetClassCombatActions() IReadOnlyList~CombatAction~
 }
 
@@ -79,12 +86,20 @@ Character ..> CombatAction : exposes
 CombatAction --> CombatTargetType
 
 class Party {
-    -List~Character~ Members
+    -List~Character~ members
     +AddMember(Character character)
     +RemoveMember(Character character)
+    +GetMembers() IReadOnlyList~Character~
 }
 
 Party "0..1" o-- "0..*" Character : contains
+
+class Inventory {
+    -List~Item~ items
+    +AddItem(Item item)
+    +RemoveItem(Item item)
+    +GetItems() IReadOnlyList~Item~
+}
 
 class Item {
     <<Abstract>>
@@ -108,12 +123,14 @@ Item <|-- Weapon
 Item <|-- Armor
 Item <|-- Potion
 
-Character "1" *-- "0..*" Item : inventory
+Character "1" *-- "1" Inventory : owns
+Inventory "1" o-- "0..*" Item : contains
 
 class Encounter {
-    -Party party
-    -List~Monster~ monsters
-    -IDiceRoller diceRoller
+    -Party _party
+    -List~Monster~ _monsters
+    -IDiceRoller _diceRoller
+    -int _attackDieSides
     +Start()
     +PlayerTurn()
     +MonsterTurn()
