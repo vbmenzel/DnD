@@ -1,5 +1,6 @@
 using DnD.Characters;
 using DnD.Combat.Actions;
+using DnD.Combat.Exceptions;
 using DnD.Interfaces;
 
 namespace DnD.Combat;
@@ -32,11 +33,28 @@ internal sealed class CombatActionResolver
     /// <param name="attacker">The character performing the action.</param>
     /// <param name="action">The combat action being performed.</param>
     /// <param name="target">The character affected by the action.</param>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown when <paramref name="attacker"/>, <paramref name="action"/>, or
+    /// <paramref name="target"/> is <see langword="null"/>.
+    /// </exception>
+    /// <exception cref="CharacterIsDefeatedException">
+    /// Thrown when the attacking character has been defeated.
+    /// </exception>
     public void Resolve(
         Character attacker,
         CombatAction action,
         Character target)
     {
+        ArgumentNullException.ThrowIfNull(attacker);
+        ArgumentNullException.ThrowIfNull(action);
+        ArgumentNullException.ThrowIfNull(target);
+
+        if (attacker.IsDefeated)
+        {
+            throw new CharacterIsDefeatedException(
+                $"{attacker.Name} cannot act because they have been defeated.");
+        }
+
         if (!action.RequiresAttackRoll)
         {
             action.Execute(target);

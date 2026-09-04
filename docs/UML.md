@@ -152,12 +152,15 @@ class Encounter {
     +Start() EncounterResult
     +PlayerTurn()
     +MonsterTurn()
+    -ResolveAction(Character attacker, CombatAction action, Character target)
 }
 
 Encounter "0..*" --> "1" Party
 Encounter "0..1" --> "1..*" Monster
 Encounter --> CombatActionResolver
 Encounter ..> EncounterResult : creates
+Encounter ..> CharacterIsDefeatedException : catches
+Encounter ..> InsufficientManaException : catches
 
 class EncounterResult {
     +bool PartyWon
@@ -180,6 +183,7 @@ class CombatConsole {
 
 Encounter ..> CombatConsole
 CombatActionResolver --> IDiceRoller
+CombatActionResolver ..> CharacterIsDefeatedException : throws
 
 class Adventure {
     -Party _party

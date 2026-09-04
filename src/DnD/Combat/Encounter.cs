@@ -1,5 +1,6 @@
 using DnD.Characters;
 using DnD.Combat.Actions;
+using DnD.Combat.Exceptions;
 using DnD.Interfaces;
 using DnD.Parties;
 
@@ -112,7 +113,7 @@ public class Encounter
             CombatAction action = CombatConsole.SelectAction(character, actions);
             Character target = SelectTarget(character, action);
 
-            _actionResolver.Resolve(character, action, target);
+            ResolveAction(character, action, target);
         }
     }
 
@@ -131,7 +132,37 @@ public class Encounter
             }
 
             Character target = GetValidTargets(monster, action)[0];
-            _actionResolver.Resolve(monster, action, target);
+            ResolveAction(monster, action, target);
+        }
+    }
+
+    /// <summary>
+    /// Resolves an action and displays recoverable combat errors without
+    /// terminating the encounter.
+    /// </summary>
+    /// <param name="attacker">The character performing the action.</param>
+    /// <param name="action">The combat action being performed.</param>
+    /// <param name="target">The character affected by the action.</param>
+    private void ResolveAction(
+        Character attacker,
+        CombatAction action,
+        Character target)
+    {
+        try
+        {
+            _actionResolver.Resolve(attacker, action, target);
+        }
+        catch (CharacterIsDefeatedException exception)
+        {
+            Console.WriteLine(exception.Message);
+        }
+        catch (InsufficientManaException exception)
+        {
+            Console.WriteLine(exception.Message);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
         }
     }
 
