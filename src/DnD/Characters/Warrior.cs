@@ -42,6 +42,10 @@ public class Warrior: Character
         ];
     }
 
+    /// <summary>
+    /// Performs a stronger attack with a reduced chance to hit.
+    /// </summary>
+    /// <param name="target">The character receiving the attack.</param>
     private void HeavyAttack(Character target)
     {
         int damage = Math.Max(BaseAttack + Level, 0);

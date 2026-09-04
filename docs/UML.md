@@ -18,6 +18,7 @@ class Character {
 class Warrior {
     +Attack(Character target)
     +GetCombatActions() IReadOnlyList~CombatAction~
+    -HeavyAttack(Character target)
 }
 
 class Wizard {
@@ -28,6 +29,7 @@ class Wizard {
 class Rogue {
     +Attack(Character target)
     +GetCombatActions() IReadOnlyList~CombatAction~
+    -SneakAttack(Character target)
 }
 
 class IDamageable {

@@ -40,6 +40,10 @@ public class Rogue : Character
         ];
     }
 
+    /// <summary>
+    /// Performs a stronger surprise attack with a reduced chance to hit.
+    /// </summary>
+    /// <param name="target">The character receiving the attack.</param>
     private void SneakAttack(Character target)
     {
         int damage = Math.Max(BaseAttack + Level, 0);
