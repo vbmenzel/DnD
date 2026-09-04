@@ -148,6 +148,12 @@ public class Encounter
         if (attackHits)
         {
             attacker.Attack(target);
+
+            if (target.IsDefeated)
+            {
+                Console.WriteLine($"{target} has been defeated!");
+            }
+
             return;
         }
 
