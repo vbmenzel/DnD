@@ -9,26 +9,28 @@ class Character {
     +int Level
     +int MaxHealth
     +int CurrentHealth
+    +Inventory Inventory
     +TakeDamage(int amount)
     +Heal(int amount)
     +Attack(Character target)
     +GetCombatActions() IReadOnlyList~CombatAction~
+    #GetClassCombatActions() IReadOnlyList~CombatAction~
 }
 
 class Warrior {
     +Attack(Character target)
-    +GetCombatActions() IReadOnlyList~CombatAction~
+    #GetClassCombatActions() IReadOnlyList~CombatAction~
     -HeavyAttack(Character target)
 }
 
 class Wizard {
     +Attack(Character target)
-    +GetCombatActions() IReadOnlyList~CombatAction~
+    #GetClassCombatActions() IReadOnlyList~CombatAction~
 }
 
 class Rogue {
     +Attack(Character target)
-    +GetCombatActions() IReadOnlyList~CombatAction~
+    #GetClassCombatActions() IReadOnlyList~CombatAction~
     -SneakAttack(Character target)
 }
 
@@ -47,7 +49,7 @@ class ISpellcaster {
 
 class Monster {
     +Attack(Character target)
-    +GetCombatActions() IReadOnlyList~CombatAction~
+    #GetClassCombatActions() IReadOnlyList~CombatAction~
 }
 
 Character <|-- Warrior
@@ -62,6 +64,7 @@ class CombatAction {
     +CombatTargetType TargetType
     +bool RequiresAttackRoll
     +int AttackRollModifier
+    +CanTarget(Character target) bool
     +Execute(Character target)
 }
 

@@ -8,6 +8,7 @@ namespace DnD.Combat.Actions;
 public sealed class CombatAction
 {
     private readonly Action<Character> _execute;
+    private readonly Func<Character, bool> _canTarget;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CombatAction"/> class.
@@ -20,6 +21,10 @@ public sealed class CombatAction
     /// <param name="execute">The behavior performed against the selected target.</param>
     /// <param name="attackRollModifier">
     /// The value added to or subtracted from the actor's attack roll.
+    /// </param>
+    /// <param name="canTarget">
+    /// An optional predicate that determines whether a character is a valid
+    /// target for the action.
     /// </param>
     /// <exception cref="ArgumentException">
     /// Thrown when <paramref name="name"/> is empty or consists only of white-space
@@ -34,7 +39,8 @@ public sealed class CombatAction
         CombatTargetType targetType,
         bool requiresAttackRoll,
         Action<Character> execute,
-        int attackRollModifier = 0)
+        int attackRollModifier = 0,
+        Func<Character, bool>? canTarget = null)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
         ArgumentNullException.ThrowIfNull(execute);
@@ -44,6 +50,7 @@ public sealed class CombatAction
         RequiresAttackRoll = requiresAttackRoll;
         AttackRollModifier = attackRollModifier;
         _execute = execute;
+        _canTarget = canTarget ?? (static _ => true);
     }
 
     /// <summary>
@@ -65,6 +72,23 @@ public sealed class CombatAction
     /// Gets the value added to or subtracted from the actor's attack roll.
     /// </summary>
     public int AttackRollModifier { get; }
+
+    /// <summary>
+    /// Determines whether the specified character is a valid target.
+    /// </summary>
+    /// <param name="target">The character to validate.</param>
+    /// <returns>
+    /// <see langword="true"/> when the action can target the character;
+    /// otherwise, <see langword="false"/>.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown when <paramref name="target"/> is <see langword="null"/>.
+    /// </exception>
+    public bool CanTarget(Character target)
+    {
+        ArgumentNullException.ThrowIfNull(target);
+        return _canTarget(target);
+    }
 
     /// <summary>
     /// Performs the action against the selected target.

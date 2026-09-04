@@ -11,7 +11,8 @@ public enum CombatTargetType
     Enemy,
 
     /// <summary>
-    /// The action targets a living member of the actor's party.
+    /// The action targets a living member of the actor's party, including the
+    /// actor.
     /// </summary>
     Ally,
 

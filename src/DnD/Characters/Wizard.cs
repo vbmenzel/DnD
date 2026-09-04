@@ -23,7 +23,7 @@ public class Wizard : Character
     }
 
     /// <inheritdoc />
-    public override IReadOnlyList<CombatAction> GetCombatActions()
+    protected override IReadOnlyList<CombatAction> GetClassCombatActions()
     {
         return
         [

@@ -22,7 +22,7 @@ public class Rogue : Character
     }
 
     /// <inheritdoc />
-    public override IReadOnlyList<CombatAction> GetCombatActions()
+    protected override IReadOnlyList<CombatAction> GetClassCombatActions()
     {
         return
         [

@@ -50,7 +50,7 @@ public class Monster : Character
     }
 
     /// <inheritdoc />
-    public override IReadOnlyList<CombatAction> GetCombatActions()
+    protected override IReadOnlyList<CombatAction> GetClassCombatActions()
     {
         return
         [
