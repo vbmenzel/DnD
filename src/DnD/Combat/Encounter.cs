@@ -160,9 +160,9 @@ public class Encounter
         {
             Console.WriteLine(exception.Message);
         }
-        catch (Exception e)
+        catch (Exception exception)
         {
-            Console.WriteLine(e.Message);
+            Console.WriteLine(exception.Message);
         }
     }
 
