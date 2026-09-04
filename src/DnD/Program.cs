@@ -1,9 +1,63 @@
-﻿namespace DnD;
+using DnD.Characters;
+using DnD.Combat;
+using DnD.Combat.Dice;
+using DnD.Interfaces;
+using DnD.Items;
+using DnD.Parties;
 
-class Program
+namespace DnD;
+
+/// <summary>
+/// Provides the entry point for the application.
+/// </summary>
+internal static class Program
 {
-    static void Main(string[] args)
+    /// <summary>
+    /// Creates the combatants and starts a combat encounter.
+    /// </summary>
+    private static void Main()
     {
-        Console.WriteLine("Hello, World!");
+        Party party = CreateParty();
+        IReadOnlyList<Monster> monsters = CreateMonsters();
+        IDiceRoller diceRoller = new RandomDiceRoller();
+        var encounter = new Encounter(party, monsters, diceRoller);
+
+        Console.WriteLine("The encounter begins!");
+        encounter.Start();
+    }
+
+    /// <summary>
+    /// Creates the party participating in the demonstration encounter.
+    /// </summary>
+    /// <returns>The configured party.</returns>
+    private static Party CreateParty()
+    {
+        var party = new Party();
+        var warrior = new Warrior("Aric", 3, 35, 9, 7);
+        var rogue = new Rogue("Lyra", 3, 25, 7, 8);
+        var wizard = new Wizard("Mira", 3, 22, 8, 6);
+
+        warrior.Inventory.AddItem(new Potion("Healing potion", 10));
+        rogue.Inventory.AddItem(new Potion("Healing potion", 10));
+        wizard.Inventory.AddItem(new Potion("Healing potion", 10));
+
+        party.AddMember(warrior);
+        party.AddMember(rogue);
+        party.AddMember(wizard);
+
+        return party;
+    }
+
+    /// <summary>
+    /// Creates the monsters participating in the demonstration encounter.
+    /// </summary>
+    /// <returns>The configured monsters.</returns>
+    private static IReadOnlyList<Monster> CreateMonsters()
+    {
+        return
+        [
+            new Monster("Goblin", 2, 16, 5, 5),
+            new Monster("Orc", 3, 28, 7, 7),
+        ];
     }
 }

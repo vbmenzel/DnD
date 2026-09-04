@@ -5,29 +5,40 @@ classDiagram
 
 class Character {
     <<Abstract>>
+    +int HP
+    +int MaxHP
     +string Name
     +int Level
-    +int MaxHealth
-    +int CurrentHealth
     +int BaseDefense
+    +int Xp
+    +int BaseAttack
+    +int CurrentHealth
+    +bool IsDefeated
     +Inventory Inventory
     +TakeDamage(int amount)
     +Heal(int amount)
-    +Attack(Character target)
+    +Attack(IDamageable target)
+    +GetCombatActions() IReadOnlyList~CombatAction~
+    #GetClassCombatActions() IReadOnlyList~CombatAction~
+    -UsePotion(Potion potion, Character target)
+    +ToString() string
 }
 
 class Warrior {
-    +Attack(Character target)
+    +Attack(IDamageable target)
+    #GetClassCombatActions() IReadOnlyList~CombatAction~
+    -HeavyAttack(Character target)
 }
 
 class Wizard {
-    +int Mana
-    +Attack(Character target)
-    +CastSpell(Character target)
+    +Attack(IDamageable target)
+    #GetClassCombatActions() IReadOnlyList~CombatAction~
 }
 
 class Rogue {
-    +Attack(Character target)
+    +Attack(IDamageable target)
+    #GetClassCombatActions() IReadOnlyList~CombatAction~
+    -SneakAttack(Character target)
 }
 
 class IDamageable {
@@ -44,7 +55,8 @@ class ISpellcaster {
 }
 
 class Monster {
-    +Attack(Character target)
+    +Attack(IDamageable target)
+    #GetClassCombatActions() IReadOnlyList~CombatAction~
 }
 
 Character <|-- Warrior
@@ -53,20 +65,40 @@ Character <|-- Rogue
 Character <|-- Monster
 
 Character ..|> IDamageable
-Wizard ..|> ISpellcaster
+
+class CombatAction {
+    +string Name
+    +CombatTargetType TargetType
+    +bool RequiresAttackRoll
+    +int AttackRollModifier
+    +CanTarget(Character target) bool
+    +Execute(Character target)
+}
+
+class CombatTargetType {
+    <<enumeration>>
+    Enemy
+    Ally
+    Self
+}
+
+Character ..> CombatAction : exposes
+CombatAction --> CombatTargetType
 
 class Party {
-    -List~Character~ Members
+    -List~Character~ members
     +AddMember(Character character)
     +RemoveMember(Character character)
+    +GetMembers() IReadOnlyList~Character~
 }
 
 Party "0..1" o-- "0..*" Character : contains
 
 class Inventory {
-    -List~Item~ Items
+    -List~Item~ items
     +AddItem(Item item)
     +RemoveItem(Item item)
+    +GetItems() IReadOnlyList~Item~
 }
 
 class Item {
@@ -95,9 +127,10 @@ Character "1" *-- "1" Inventory : owns
 Inventory "1" o-- "0..*" Item : contains
 
 class Encounter {
-    -Party party
-    -List~Monster~ monsters
-    -IDiceRoller diceRoller
+    -Party _party
+    -List~Monster~ _monsters
+    -IDiceRoller _diceRoller
+    -int _attackDieSides
     +Start()
     +PlayerTurn()
     +MonsterTurn()
@@ -131,10 +164,3 @@ class CharacterIsDefeatedException {
 class InsufficientManaException {
     +InsufficientManaException(string message)
 }
-
-```
-
-Character and Inventory use composition because the Inventory belongs to the
-Character and does not exist independently. Inventory and Item use aggregation
-because Items can exist independently and can be transferred between
-inventories.
