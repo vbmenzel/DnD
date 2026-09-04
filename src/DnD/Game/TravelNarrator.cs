@@ -1,3 +1,5 @@
+using DnD.Interfaces;
+
 namespace DnD.Game;
 
 /// <summary>
@@ -24,13 +26,18 @@ internal static class TravelNarrator
     /// Displays a short, randomized journey and pauses before the next
     /// encounter.
     /// </summary>
-    public static void Narrate()
+    /// <param name="diceRoller">The dice roller used for random selections.</param>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown when <paramref name="diceRoller"/> is <see langword="null"/>.
+    /// </exception>
+    public static void Narrate(IDiceRoller diceRoller)
     {
+        ArgumentNullException.ThrowIfNull(diceRoller);
+
         // Select from a copy to avoid repeating a message during one journey.
         var availableMessages = TravelMessages.ToList();
-        int messageCount = Random.Shared.Next(
-            MinimumTravelMessages,
-            MaximumTravelMessages + 1);
+        int messageCount = MinimumTravelMessages + diceRoller.Roll(
+            MaximumTravelMessages - MinimumTravelMessages + 1) - 1;
 
         Console.WriteLine();
         Console.WriteLine("The party continues its journey...");
@@ -39,25 +46,27 @@ internal static class TravelNarrator
              messageIndex < messageCount;
              messageIndex++)
         {
-            Delay();
+            Delay(diceRoller);
 
-            int selectedIndex = Random.Shared.Next(availableMessages.Count);
+            int selectedIndex = diceRoller.Roll(availableMessages.Count) - 1;
             Console.WriteLine(availableMessages[selectedIndex]);
             availableMessages.RemoveAt(selectedIndex);
         }
 
         // Pause once more before the next encounter begins.
-        Delay();
+        Delay(diceRoller);
     }
 
     /// <summary>
     /// Waits for a short randomized travel delay.
     /// </summary>
-    private static void Delay()
+    /// <param name="diceRoller">The dice roller used to select the delay.</param>
+    private static void Delay(IDiceRoller diceRoller)
     {
-        int delayMilliseconds = Random.Shared.Next(
-            MinimumTravelDelayMilliseconds,
-            MaximumTravelDelayMilliseconds + 1);
+        int delayMilliseconds = MinimumTravelDelayMilliseconds +
+            diceRoller.Roll(
+                MaximumTravelDelayMilliseconds -
+                MinimumTravelDelayMilliseconds + 1) - 1;
 
         Thread.Sleep(delayMilliseconds);
     }

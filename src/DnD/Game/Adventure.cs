@@ -46,11 +46,12 @@ internal sealed class Adventure
             // Begin with combat; travel is shown only between encounters.
             if (encounterNumber > 1)
             {
-                TravelNarrator.Narrate();
+                TravelNarrator.Narrate(_diceRoller);
             }
 
             IReadOnlyList<Monster> monsters = MonsterGenerator.Generate(
-                encounterNumber);
+                encounterNumber,
+                _diceRoller);
             var encounter = new Encounter(_party, monsters, _diceRoller);
 
             Console.WriteLine();
@@ -137,7 +138,9 @@ internal sealed class Adventure
             return;
         }
 
-        Item? item = LootGenerator.Generate(result.DefeatedMonsters);
+        Item? item = LootGenerator.Generate(
+            result.DefeatedMonsters,
+            _diceRoller);
 
         if (item is null)
         {
@@ -145,7 +148,7 @@ internal sealed class Adventure
         }
 
         Character recipient = livingMembers[
-            Random.Shared.Next(livingMembers.Count)];
+            _diceRoller.Roll(livingMembers.Count) - 1];
 
         recipient.Inventory.AddItem(item);
         Console.WriteLine($"{recipient.Name} receives {item.Name}.");

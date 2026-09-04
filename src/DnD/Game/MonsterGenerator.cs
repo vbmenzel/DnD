@@ -1,4 +1,5 @@
 using DnD.Characters;
+using DnD.Interfaces;
 
 namespace DnD.Game;
 
@@ -24,12 +25,20 @@ internal static class MonsterGenerator
     /// Generates a randomized monster group scaled to an encounter number.
     /// </summary>
     /// <param name="encounterNumber">The one-based encounter number.</param>
+    /// <param name="diceRoller">The dice roller used for random selections.</param>
     /// <returns>The monsters participating in the encounter.</returns>
     /// <exception cref="ArgumentOutOfRangeException">
     /// Thrown when <paramref name="encounterNumber"/> is less than one.
     /// </exception>
-    public static IReadOnlyList<Monster> Generate(int encounterNumber)
+    /// <exception cref="ArgumentNullException">
+    /// Thrown when <paramref name="diceRoller"/> is <see langword="null"/>.
+    /// </exception>
+    public static IReadOnlyList<Monster> Generate(
+        int encounterNumber,
+        IDiceRoller diceRoller)
     {
+        ArgumentNullException.ThrowIfNull(diceRoller);
+
         if (encounterNumber < 1)
         {
             throw new ArgumentOutOfRangeException(nameof(encounterNumber));
@@ -45,7 +54,7 @@ internal static class MonsterGenerator
         int maximumEncounterSize = Math.Min(
             1 + ((encounterNumber - 1) / 2),
             MaximumMonsterCount);
-        int monsterCount = Random.Shared.Next(1, maximumEncounterSize + 1);
+        int monsterCount = diceRoller.Roll(maximumEncounterSize);
 
         // Select without replacement to avoid duplicate names in one encounter.
         var availableNames = MonsterNames.ToList();
@@ -53,14 +62,14 @@ internal static class MonsterGenerator
 
         for (int monsterIndex = 0; monsterIndex < monsterCount; monsterIndex++)
         {
-            int nameIndex = Random.Shared.Next(availableNames.Count);
+            int nameIndex = diceRoller.Roll(availableNames.Count) - 1;
             string name = availableNames[nameIndex];
             availableNames.RemoveAt(nameIndex);
 
             // Random base values vary monsters within the same difficulty tier.
-            int maxHealth = Random.Shared.Next(7, 13) + (difficultyIncrease * 3);
-            int baseAttack = Random.Shared.Next(2, 5) + difficultyIncrease;
-            int baseDefense = Random.Shared.Next(2, 5) + difficultyIncrease;
+            int maxHealth = diceRoller.Roll(6) + 6 + (difficultyIncrease * 3);
+            int baseAttack = diceRoller.Roll(3) + 1 + difficultyIncrease;
+            int baseDefense = diceRoller.Roll(3) + 1 + difficultyIncrease;
 
             monsters.Add(new Monster(
                 name,

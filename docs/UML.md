@@ -208,7 +208,7 @@ class MonsterGenerator {
     -int MaximumMonsterCount
     -int MaximumMonsterLevel
     -string[] MonsterNames
-    +Generate(int encounterNumber) IReadOnlyList~Monster~
+    +Generate(int encounterNumber, IDiceRoller diceRoller) IReadOnlyList~Monster~
 }
 
 class TravelNarrator {
@@ -218,24 +218,28 @@ class TravelNarrator {
     -int MinimumTravelDelayMilliseconds
     -int MaximumTravelDelayMilliseconds
     -string[] TravelMessages
-    +Narrate()
+    +Narrate(IDiceRoller diceRoller)
+    -Delay(IDiceRoller diceRoller)
 }
 
 MonsterGenerator ..> Monster : creates
+MonsterGenerator --> IDiceRoller
+TravelNarrator --> IDiceRoller
 
 class LootGenerator {
     <<static>>
     -int LootTypeCount
-    +Generate(IReadOnlyList~Monster~ defeatedMonsters) Item?
-    -CreateWeapon(int monsterLevel) Weapon
-    -CreateArmor(int monsterLevel) Armor
-    -CreatePotion(int monsterLevel) Potion
+    +Generate(IReadOnlyList~Monster~ defeatedMonsters, IDiceRoller diceRoller) Item?
+    -CreateWeapon(int monsterLevel, IDiceRoller diceRoller) Weapon
+    -CreateArmor(int monsterLevel, IDiceRoller diceRoller) Armor
+    -CreatePotion(int monsterLevel, IDiceRoller diceRoller) Potion
 }
 
 LootGenerator ..> Monster
 LootGenerator ..> Weapon : creates
 LootGenerator ..> Armor : creates
 LootGenerator ..> Potion : creates
+LootGenerator --> IDiceRoller
 
 class IDiceRoller {
     <<Interface>>

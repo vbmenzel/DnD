@@ -1,4 +1,5 @@
 using DnD.Characters;
+using DnD.Interfaces;
 using DnD.Items;
 
 namespace DnD.Game;
@@ -16,17 +17,22 @@ internal static class LootGenerator
     /// <param name="defeatedMonsters">
     /// The monsters defeated during an encounter.
     /// </param>
+    /// <param name="diceRoller">The dice roller used for random selections.</param>
     /// <returns>
     /// A randomized item, or <see langword="null"/> when no monsters were
     /// defeated.
     /// </returns>
     /// <exception cref="ArgumentNullException">
     /// Thrown when <paramref name="defeatedMonsters"/> is
+    /// <see langword="null"/>, or when <paramref name="diceRoller"/> is
     /// <see langword="null"/>.
     /// </exception>
-    public static Item? Generate(IReadOnlyList<Monster> defeatedMonsters)
+    public static Item? Generate(
+        IReadOnlyList<Monster> defeatedMonsters,
+        IDiceRoller diceRoller)
     {
         ArgumentNullException.ThrowIfNull(defeatedMonsters);
+        ArgumentNullException.ThrowIfNull(diceRoller);
 
         if (defeatedMonsters.Count == 0)
         {
@@ -35,11 +41,11 @@ internal static class LootGenerator
 
         int monsterLevel = defeatedMonsters.Max(monster => monster.Level);
 
-        return Random.Shared.Next(LootTypeCount) switch
+        return (diceRoller.Roll(LootTypeCount) - 1) switch
         {
-            0 => CreateWeapon(monsterLevel),
-            1 => CreateArmor(monsterLevel),
-            _ => CreatePotion(monsterLevel),
+            0 => CreateWeapon(monsterLevel, diceRoller),
+            1 => CreateArmor(monsterLevel, diceRoller),
+            _ => CreatePotion(monsterLevel, diceRoller),
         };
     }
 
@@ -47,11 +53,14 @@ internal static class LootGenerator
     /// Creates a weapon scaled to a monster level.
     /// </summary>
     /// <param name="monsterLevel">The level used to scale the weapon.</param>
+    /// <param name="diceRoller">The dice roller used to select its bonus.</param>
     /// <returns>The generated weapon.</returns>
-    private static Weapon CreateWeapon(int monsterLevel)
+    private static Weapon CreateWeapon(
+        int monsterLevel,
+        IDiceRoller diceRoller)
     {
         int maximumBonus = 1 + (monsterLevel / 4);
-        int damageBonus = Random.Shared.Next(1, maximumBonus + 1);
+        int damageBonus = diceRoller.Roll(maximumBonus);
 
         return new Weapon($"Weapon (+{damageBonus} damage)", damageBonus);
     }
@@ -60,11 +69,14 @@ internal static class LootGenerator
     /// Creates armor scaled to a monster level.
     /// </summary>
     /// <param name="monsterLevel">The level used to scale the armor.</param>
+    /// <param name="diceRoller">The dice roller used to select its bonus.</param>
     /// <returns>The generated armor.</returns>
-    private static Armor CreateArmor(int monsterLevel)
+    private static Armor CreateArmor(
+        int monsterLevel,
+        IDiceRoller diceRoller)
     {
         int maximumBonus = 1 + (monsterLevel / 4);
-        int defenseBonus = Random.Shared.Next(1, maximumBonus + 1);
+        int defenseBonus = diceRoller.Roll(maximumBonus);
 
         return new Armor($"Armor (+{defenseBonus} defense)", defenseBonus);
     }
@@ -73,10 +85,15 @@ internal static class LootGenerator
     /// Creates a healing potion scaled to a monster level.
     /// </summary>
     /// <param name="monsterLevel">The level used to scale the potion.</param>
+    /// <param name="diceRoller">
+    /// The dice roller used to select its healing amount.
+    /// </param>
     /// <returns>The generated potion.</returns>
-    private static Potion CreatePotion(int monsterLevel)
+    private static Potion CreatePotion(
+        int monsterLevel,
+        IDiceRoller diceRoller)
     {
-        int healAmount = Random.Shared.Next(5, 11) + (monsterLevel * 2);
+        int healAmount = diceRoller.Roll(6) + 4 + (monsterLevel * 2);
 
         return new Potion($"Healing potion ({healAmount} HP)", healAmount);
     }
