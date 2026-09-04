@@ -104,9 +104,19 @@ Party "0..1" o-- "0..*" Character : contains
 
 class Inventory {
     -List~Item~ items
+    -Dictionary~EquipmentSlot, Item~ _equippedItems
     +AddItem(Item item)
     +RemoveItem(Item item)
     +GetItems() IReadOnlyList~Item~
+    +GetEquippedItem(EquipmentSlot slot) Item?
+    -EquipIfUpgrade(Item item)
+    -RefreshEquipmentAfterRemoval(Item removedItem)
+}
+
+class EquipmentSlot {
+    <<enumeration>>
+    Weapon
+    Armor
 }
 
 class Item {
@@ -133,6 +143,7 @@ Item <|-- Potion
 
 Character "1" *-- "1" Inventory : owns
 Inventory "1" o-- "0..*" Item : contains
+Inventory --> EquipmentSlot
 
 class Encounter {
     -Party _party

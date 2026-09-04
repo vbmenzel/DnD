@@ -22,18 +22,20 @@ public abstract class Character : IDamageable
     public bool IsDefeated => HP <= 0;
 
     /// <summary>
-    /// Gets the combined damage bonus from weapons in the inventory.
+    /// Gets the damage bonus from the equipped weapon.
     /// </summary>
-    public int DamageBonus => Inventory.GetItems()
-        .OfType<Weapon>()
-        .Sum(weapon => weapon.DamageBonus);
+    public int DamageBonus =>
+        Inventory.GetEquippedItem(EquipmentSlot.Weapon) is Weapon weapon
+            ? weapon.DamageBonus
+            : 0;
 
     /// <summary>
-    /// Gets the combined defense bonus from armor in the inventory.
+    /// Gets the defense bonus from the equipped armor.
     /// </summary>
-    public int DefenseBonus => Inventory.GetItems()
-        .OfType<Armor>()
-        .Sum(armor => armor.DefenseBonus);
+    public int DefenseBonus =>
+        Inventory.GetEquippedItem(EquipmentSlot.Armor) is Armor armor
+            ? armor.DefenseBonus
+            : 0;
 
     /// <summary>
     /// Gets the experience required to advance from the current level.
