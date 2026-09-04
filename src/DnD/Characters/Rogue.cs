@@ -13,12 +13,27 @@ public class Rogue : Character
     {
 
     }
+
+    /// <summary>
+    /// Performs a quick two-part attack with level-based follow-up damage.
+    /// </summary>
+    /// <param name="target">The target receiving both strikes.</param>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown when <paramref name="target"/> is <see langword="null"/>.
+    /// </exception>
     public override void Attack(IDamageable target)
     {
-        int damage = BaseAttack + DamageBonus;
-        if (damage < 0) damage = 0; // Ensure damage is not negative
-        target.TakeDamage(damage);
-        Console.WriteLine($"{Name} attacks {target} for {damage} damage!"); // Overvej at udvide med kritiske hits eller andre effekter, der er typiske for en Rogue-klasse.
+        ArgumentNullException.ThrowIfNull(target);
+
+        int firstStrikeDamage = Math.Max(BaseAttack + DamageBonus, 0);
+        int followUpDamage = Math.Max(Level, 0);
+        int totalDamage = firstStrikeDamage + followUpDamage;
+
+        target.TakeDamage(firstStrikeDamage);
+        target.TakeDamage(followUpDamage);
+
+        Console.WriteLine(
+            $"{Name} strikes {target} twice for {totalDamage} total damage!");
     }
 
     /// <inheritdoc />
@@ -27,7 +42,7 @@ public class Rogue : Character
         return
         [
             new CombatAction(
-                "Attack",
+                "Quick attack",
                 CombatTargetType.Enemy,
                 true,
                 target => Attack(target)),
@@ -46,7 +61,7 @@ public class Rogue : Character
     /// <param name="target">The character receiving the attack.</param>
     private void SneakAttack(Character target)
     {
-        int damage = Math.Max(BaseAttack + DamageBonus + Level, 0);
+        int damage = Math.Max(BaseAttack + DamageBonus + (Level * 2), 0);
         target.TakeDamage(damage);
         Console.WriteLine($"{Name} sneak attacks {target} for {damage} damage!");
     }
