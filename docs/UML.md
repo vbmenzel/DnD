@@ -130,7 +130,7 @@ class Encounter {
     -Party _party
     -List~Monster~ _monsters
     -CombatActionResolver _actionResolver
-    +Start()
+    +Start() EncounterResult
     +PlayerTurn()
     +MonsterTurn()
 }
@@ -138,6 +138,14 @@ class Encounter {
 Encounter "0..*" --> "1" Party
 Encounter "0..1" --> "1..*" Monster
 Encounter --> CombatActionResolver
+Encounter ..> EncounterResult : creates
+
+class EncounterResult {
+    +bool PartyWon
+    +IReadOnlyList~Monster~ DefeatedMonsters
+}
+
+EncounterResult --> Monster
 
 class CombatActionResolver {
     -IDiceRoller _diceRoller
@@ -163,6 +171,7 @@ class Adventure {
 Adventure --> Party
 Adventure --> IDiceRoller
 Adventure ..> Encounter : creates
+Adventure ..> EncounterResult
 Adventure ..> MonsterGenerator
 Adventure ..> TravelNarrator
 

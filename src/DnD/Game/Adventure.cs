@@ -40,7 +40,7 @@ internal sealed class Adventure
 
         // There is deliberately no final encounter. The adventure continues
         // until combat defeats every party member.
-        while (!IsPartyDefeated())
+        while (true)
         {
             // Begin with combat; travel is shown only between encounters.
             if (encounterNumber > 1)
@@ -54,11 +54,11 @@ internal sealed class Adventure
 
             Console.WriteLine();
             Console.WriteLine($"Encounter {encounterNumber} begins!");
-            encounter.Start();
+            EncounterResult result = encounter.Start();
 
             // TODO: Award XP and dropped items after every encounter.
 
-            if (IsPartyDefeated())
+            if (!result.PartyWon)
             {
                 Console.WriteLine("The adventure has come to an end.");
                 return;
@@ -68,15 +68,4 @@ internal sealed class Adventure
         }
     }
 
-    /// <summary>
-    /// Determines whether every member of the party has been defeated.
-    /// </summary>
-    /// <returns>
-    /// <see langword="true"/> when no living party members remain; otherwise,
-    /// <see langword="false"/>.
-    /// </returns>
-    private bool IsPartyDefeated()
-    {
-        return _party.GetMembers().All(character => character.IsDefeated);
-    }
 }

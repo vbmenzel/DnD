@@ -71,7 +71,8 @@ public class Encounter
     /// Starts the encounter and continues combat until either the party or all
     /// monsters have been defeated.
     /// </summary>
-    public void Start()
+    /// <returns>The result of the completed encounter.</returns>
+    public EncounterResult Start()
     {
         while (!IsPartyDefeated() && !AreMonstersDefeated())
         {
@@ -85,7 +86,12 @@ public class Encounter
             MonsterTurn();
         }
 
-        DisplayResult();
+        bool partyWon = AreMonstersDefeated();
+        DisplayResult(partyWon);
+
+        return new EncounterResult(
+            partyWon,
+            _monsters.Where(monster => monster.IsDefeated));
     }
 
     /// <summary>
@@ -216,9 +222,12 @@ public class Encounter
     /// <summary>
     /// Displays the result of the encounter.
     /// </summary>
-    private void DisplayResult()
+    /// <param name="partyWon">
+    /// A value indicating whether the party defeated every monster.
+    /// </param>
+    private static void DisplayResult(bool partyWon)
     {
-        string result = AreMonstersDefeated()
+        string result = partyWon
             ? "The party won the encounter!"
             : "The monsters won the encounter!";
 
