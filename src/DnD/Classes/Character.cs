@@ -41,6 +41,7 @@ public abstract class Character: IDamageable
 
         if (CurrentHealth < 0)
         {
+            Console.WriteLine($"{Name} has been defeated!");
             CurrentHealth = 0;
         }
     }
