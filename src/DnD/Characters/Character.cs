@@ -43,8 +43,26 @@ public abstract class Character : IDamageable
     public int ExperienceRequiredForNextLevel =>
         BaseExperienceRequirement + ((Level - 1) * ExperienceRequirementIncrease);
 
+    /// <summary>
+    /// Initializes the state shared by every character.
+    /// </summary>
+    /// <param name="name">The character's name.</param>
+    /// <param name="level">The character's initial level.</param>
+    /// <param name="maxHP">The character's maximum health points.</param>
+    /// <param name="baseAttack">The character's base attack value.</param>
+    /// <param name="baseDefense">The character's base defense value.</param>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// Thrown when <paramref name="maxHP"/> is less than one.
+    /// </exception>
     protected Character(string name, int level, int maxHP, int baseAttack, int baseDefense)
     {
+        if (maxHP < 1)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(maxHP),
+                "Maximum health must be at least one.");
+        }
+
         Name = name;
         Level = level;
         MaxHP = maxHP;
@@ -106,23 +124,42 @@ public abstract class Character : IDamageable
         return $"{Name}";
     }
 
+    /// <summary>
+    /// Reduces the character's health without allowing it to fall below zero.
+    /// </summary>
+    /// <param name="amount">The amount of damage to apply.</param>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// Thrown when <paramref name="amount"/> is negative.
+    /// </exception>
     public void TakeDamage(int amount)
     {
-        HP -= amount;
-
-        if (HP < 0)
+        if (amount < 0)
         {
-            HP = 0;
+            throw new ArgumentOutOfRangeException(
+                nameof(amount),
+                "Damage cannot be negative.");
         }
+
+        HP = Math.Max(HP - amount, 0);
     }
 
+    /// <summary>
+    /// Restores the character's health without exceeding maximum health.
+    /// </summary>
+    /// <param name="amount">The amount of health to restore.</param>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// Thrown when <paramref name="amount"/> is negative.
+    /// </exception>
     public void Heal(int amount)
     {
-        HP += amount;
-        if (HP > MaxHP)
+        if (amount < 0)
         {
-            HP = MaxHP;
+            throw new ArgumentOutOfRangeException(
+                nameof(amount),
+                "Healing cannot be negative.");
         }
+
+        HP = (int)Math.Min((long)HP + amount, MaxHP);
     }
 
     /// <summary>
