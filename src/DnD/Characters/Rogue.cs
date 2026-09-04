@@ -15,7 +15,7 @@ public class Rogue : Character
     }
     public override void Attack(IDamageable target)
     {
-        int damage = BaseAttack; //+ BonusDamage skal implementeres // Example damage calculation
+        int damage = BaseAttack + DamageBonus;
         if (damage < 0) damage = 0; // Ensure damage is not negative
         target.TakeDamage(damage);
         Console.WriteLine($"{Name} attacks {target} for {damage} damage!"); // Overvej at udvide med kritiske hits eller andre effekter, der er typiske for en Rogue-klasse.
@@ -46,7 +46,7 @@ public class Rogue : Character
     /// <param name="target">The character receiving the attack.</param>
     private void SneakAttack(Character target)
     {
-        int damage = Math.Max(BaseAttack + Level, 0);
+        int damage = Math.Max(BaseAttack + DamageBonus + Level, 0);
         target.TakeDamage(damage);
         Console.WriteLine($"{Name} sneak attacks {target} for {damage} damage!");
     }

@@ -46,7 +46,8 @@ internal sealed class CombatActionResolver
 
         int roll = _diceRoller.Roll(_attackDieSides);
         long attackScore = (long)roll + attacker.Level + action.AttackRollModifier;
-        long defenseScore = (long)target.BaseDefense + target.Level;
+        long defenseScore = (long)target.BaseDefense + target.Level +
+            target.DefenseBonus;
 
         // The die's maximum result is an automatic hit. For all other results,
         // one misses and the remaining rolls compare attack and defense scores.

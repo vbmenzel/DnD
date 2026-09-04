@@ -17,7 +17,7 @@ public class Warrior: Character
 
     public override void Attack(IDamageable target)
     {
-        int damage = BaseAttack; //+ BonusDamage skal implementeres // Example damage calculation
+        int damage = BaseAttack + DamageBonus;
         if (damage < 0) damage = 0; // Ensure damage is not negative
         target.TakeDamage(damage);
         Console.WriteLine($"{Name} attacks {target} for {damage} damage!"); //overvej at skrive overkill eller noget hvis mm
@@ -48,7 +48,7 @@ public class Warrior: Character
     /// <param name="target">The character receiving the attack.</param>
     private void HeavyAttack(Character target)
     {
-        int damage = Math.Max(BaseAttack + Level, 0);
+        int damage = Math.Max(BaseAttack + DamageBonus + Level, 0);
         target.TakeDamage(damage);
         Console.WriteLine($"{Name} uses a heavy attack on {target} for {damage} damage!");
     }

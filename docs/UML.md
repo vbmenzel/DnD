@@ -17,6 +17,8 @@ class Character {
     +int BaseAttack
     +int CurrentHealth
     +bool IsDefeated
+    +int DamageBonus
+    +int DefenseBonus
     +Inventory Inventory
     +TakeDamage(int amount)
     +Heal(int amount)

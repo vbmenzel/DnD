@@ -52,7 +52,7 @@ public class Monster : Character
                 $"{Name} cannot attack because it has been defeated.");
         }
 
-        int damage = Math.Max(BaseAttack, 0);
+        int damage = Math.Max(BaseAttack + DamageBonus, 0);
         target.TakeDamage(damage);
         Console.WriteLine($"{Name} attacks {target} for {damage} damage!");
     }
