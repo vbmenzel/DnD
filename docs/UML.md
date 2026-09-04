@@ -175,6 +175,7 @@ class Adventure {
     -IDiceRoller _diceRoller
     +Start()
     -AwardExperience(EncounterResult result)
+    -AwardLoot(EncounterResult result)
     -CalculateExperienceReward(EncounterResult result) int
     -GetLivingPartyMembers() IReadOnlyList~Character~
 }
@@ -184,6 +185,7 @@ Adventure --> IDiceRoller
 Adventure ..> Encounter : creates
 Adventure ..> EncounterResult
 Adventure ..> MonsterGenerator
+Adventure ..> LootGenerator
 Adventure ..> TravelNarrator
 
 class MonsterGenerator {
@@ -205,6 +207,20 @@ class TravelNarrator {
 }
 
 MonsterGenerator ..> Monster : creates
+
+class LootGenerator {
+    <<static>>
+    -int LootTypeCount
+    +Generate(IReadOnlyList~Monster~ defeatedMonsters) Item?
+    -CreateWeapon(int monsterLevel) Weapon
+    -CreateArmor(int monsterLevel) Armor
+    -CreatePotion(int monsterLevel) Potion
+}
+
+LootGenerator ..> Monster
+LootGenerator ..> Weapon : creates
+LootGenerator ..> Armor : creates
+LootGenerator ..> Potion : creates
 
 class IDiceRoller {
     <<Interface>>

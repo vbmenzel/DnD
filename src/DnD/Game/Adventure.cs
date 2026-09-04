@@ -1,6 +1,7 @@
 using DnD.Characters;
 using DnD.Combat;
 using DnD.Interfaces;
+using DnD.Items;
 using DnD.Parties;
 
 namespace DnD.Game;
@@ -57,8 +58,7 @@ internal sealed class Adventure
             EncounterResult result = encounter.Start();
 
             AwardExperience(result);
-
-            // TODO: Award dropped items after every encounter.
+            AwardLoot(result);
 
             if (!result.PartyWon)
             {
@@ -122,5 +122,32 @@ internal sealed class Adventure
         return _party.GetMembers()
             .Where(character => !character.IsDefeated)
             .ToList();
+    }
+
+    /// <summary>
+    /// Generates and awards an item to a random living party member.
+    /// </summary>
+    /// <param name="result">The completed encounter's result.</param>
+    private void AwardLoot(EncounterResult result)
+    {
+        IReadOnlyList<Character> livingMembers = GetLivingPartyMembers();
+
+        if (livingMembers.Count == 0)
+        {
+            return;
+        }
+
+        Item? item = LootGenerator.Generate(result.DefeatedMonsters);
+
+        if (item is null)
+        {
+            return;
+        }
+
+        Character recipient = livingMembers[
+            Random.Shared.Next(livingMembers.Count)];
+
+        recipient.Inventory.AddItem(item);
+        Console.WriteLine($"{recipient.Name} receives {item.Name}.");
     }
 }
