@@ -30,6 +30,11 @@ public abstract class Character: IDamageable
     public abstract void Attack(IDamageable target);
 
 
+    public override string ToString()
+    {
+        return $"{Name}";
+    }
+
     public void TakeDamage(int amount)
     {
         CurrentHealth -= amount;
