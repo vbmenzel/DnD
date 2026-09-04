@@ -163,7 +163,28 @@ class Adventure {
 Adventure --> Party
 Adventure --> IDiceRoller
 Adventure ..> Encounter : creates
-Adventure ..> Monster : creates
+Adventure ..> MonsterGenerator
+Adventure ..> TravelNarrator
+
+class MonsterGenerator {
+    <<static>>
+    -int MaximumMonsterCount
+    -int MaximumMonsterLevel
+    -string[] MonsterNames
+    +Generate(int encounterNumber) IReadOnlyList~Monster~
+}
+
+class TravelNarrator {
+    <<static>>
+    -int MinimumTravelMessages
+    -int MaximumTravelMessages
+    -int MinimumTravelDelayMilliseconds
+    -int MaximumTravelDelayMilliseconds
+    -string[] TravelMessages
+    +Narrate()
+}
+
+MonsterGenerator ..> Monster : creates
 
 class IDiceRoller {
     <<Interface>>
