@@ -1,7 +1,7 @@
 ﻿namespace DnD.Items
 {
 	// Inventory holder styr på en Characters items.
-	// Listen er private, så items kun ændres gennem Inventory-metoderne.
+	// Listen er privat, så items kun ændres gennem Inventory-metoderne.
 	public class Inventory
 	{
 		private readonly List<Item> items = new();

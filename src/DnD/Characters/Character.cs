@@ -1,5 +1,6 @@
-﻿using DnD.Interfaces;
-using DnD.Combat.Actions;
+﻿using DnD.Combat.Actions;
+using DnD.Interfaces;
+using DnD.Items;
 
 namespace DnD.Characters;
 
@@ -12,6 +13,7 @@ public abstract class Character : IDamageable
     public int BaseDefense { get; private set; }
     public int Xp { get; private set; }
     public int BaseAttack { get; private set; }
+    public Inventory Inventory { get; } = new Inventory();
 
     public int CurrentHealth => HP;
 
