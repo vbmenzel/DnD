@@ -1,7 +1,16 @@
-# UML Class Diagram
+# Everything UML Diagram
+
+This is the complete class diagram. For a less dense entry point, see the
+[readable UML guide](UML-Overview.md), which links to smaller connected views.
 
 ```mermaid
 classDiagram
+
+class Program {
+    <<static>>
+    -Main()
+    -CreateParty() Party
+}
 
 class Character {
     <<Abstract>>
@@ -23,9 +32,9 @@ class Character {
     +TakeDamage(int amount)
     +Heal(int amount)
     +GainExperience(int amount)
-    +Attack(IDamageable target)
+    +Attack(IDamageable target)*
     +GetCombatActions() IReadOnlyList~CombatAction~
-    #GetClassCombatActions() IReadOnlyList~CombatAction~
+    #GetClassCombatActions() IReadOnlyList~CombatAction~*
     -UsePotion(Potion potion, Character target)
     +ToString() string
 }
@@ -83,11 +92,14 @@ Character <|-- Wizard
 Character <|-- Rogue
 Character <|-- Monster
 
-Character ..|> IDamageable
-Wizard ..|> ISpellcaster
+IDamageable <|.. Character
+ISpellcaster <|.. Wizard
+ISpellcaster ..> IDamageable : targets
 Wizard ..> InsufficientManaException : throws
 
 class CombatAction {
+    -Action~Character~ _execute
+    -Func~Character, bool~ _canTarget
     +string Name
     +CombatTargetType TargetType
     +bool RequiresAttackRoll
@@ -103,8 +115,9 @@ class CombatTargetType {
     Self
 }
 
-Character ..> CombatAction : exposes
-CombatAction --> CombatTargetType
+Character ..> CombatAction : creates and returns
+CombatAction ..> Character : targets
+CombatAction ..> CombatTargetType : uses
 
 class Party {
     -List~Character~ members
@@ -113,7 +126,7 @@ class Party {
     +GetMembers() IReadOnlyList~Character~
 }
 
-Party "0..1" o-- "0..*" Character : contains
+Party "0..*" o-- "0..*" Character : contains
 
 class Inventory {
     -List~Item~ items
@@ -154,11 +167,13 @@ Item <|-- Weapon
 Item <|-- Armor
 Item <|-- Potion
 
-Character "1" *-- "1" Inventory : owns
-Inventory "1" o-- "0..*" Item : contains
-Inventory --> EquipmentSlot
+Character "0..1" *-- "1" Inventory : owns
+Inventory "0..*" o-- "0..*" Item : contains
+Inventory ..> EquipmentSlot : uses
+Potion ..> Character : heals
 
 class Encounter {
+    -int DefaultAttackDieSides
     -Party _party
     -List~Monster~ _monsters
     -CombatActionResolver _actionResolver
@@ -166,12 +181,20 @@ class Encounter {
     +PlayerTurn()
     +MonsterTurn()
     -ResolveAction(Character attacker, CombatAction action, Character target)
+    -GetUsableActions(Character character) IReadOnlyList~CombatAction~
+    -SelectTarget(Character actor, CombatAction action) Character
+    -GetValidTargets(Character actor, CombatAction action) IReadOnlyList~Character~
+    -IsPartyDefeated() bool
+    -AreMonstersDefeated() bool
+    -DisplayResult(bool partyWon)
 }
 
-Encounter "0..*" --> "1" Party
-Encounter "0..1" --> "1..*" Monster
-Encounter --> CombatActionResolver
+Encounter "0..*" --> "1" Party : retains
+Encounter "0..*" o-- "1..*" Monster : retains opponents
+Encounter "0..1" *-- "1" CombatActionResolver : owns
 Encounter ..> EncounterResult : creates
+Encounter ..> CombatAction : selects
+Encounter ..> IDiceRoller : receives
 Encounter ..> CharacterIsDefeatedException : catches
 Encounter ..> InsufficientManaException : catches
 
@@ -180,23 +203,25 @@ class EncounterResult {
     +IReadOnlyList~Monster~ DefeatedMonsters
 }
 
-EncounterResult --> Monster
+EncounterResult "0..*" o-- "0..*" Monster : retains defeated
 
 class CombatActionResolver {
     -IDiceRoller _diceRoller
     -int _attackDieSides
     +Resolve(Character attacker, CombatAction action, Character target)
+    -DisplayDefeatIfNeeded(Character target)
 }
 
 class CombatConsole {
     <<static>>
     +SelectAction(Character character, IReadOnlyList~CombatAction~ actions) CombatAction
     +SelectTarget(IReadOnlyList~Character~ targets) Character
+    -ReadSelection(int optionCount) int
 }
 
-Encounter ..> CombatConsole
-CombatConsole ..> ISpellcaster
-CombatActionResolver --> IDiceRoller
+Encounter ..> CombatConsole : calls
+CombatConsole ..> ISpellcaster : reads mana
+CombatActionResolver "0..*" --> "1" IDiceRoller : retains
 CombatActionResolver ..> CharacterIsDefeatedException : throws
 
 class Adventure {
@@ -210,13 +235,13 @@ class Adventure {
     -GetLivingPartyMembers() IReadOnlyList~Character~
 }
 
-Adventure --> Party
-Adventure --> IDiceRoller
-Adventure ..> Encounter : creates
-Adventure ..> EncounterResult
-Adventure ..> MonsterGenerator
-Adventure ..> LootGenerator
-Adventure ..> TravelNarrator
+Adventure "0..*" --> "1" Party : retains
+Adventure "0..*" --> "1" IDiceRoller : retains
+Adventure ..> Encounter : creates and runs
+Adventure ..> EncounterResult : processes
+Adventure ..> MonsterGenerator : calls
+Adventure ..> LootGenerator : calls
+Adventure ..> TravelNarrator : calls
 
 class MonsterGenerator {
     <<static>>
@@ -238,8 +263,8 @@ class TravelNarrator {
 }
 
 MonsterGenerator ..> Monster : creates
-MonsterGenerator --> IDiceRoller
-TravelNarrator --> IDiceRoller
+MonsterGenerator ..> IDiceRoller : uses parameter
+TravelNarrator ..> IDiceRoller : uses parameter
 
 class LootGenerator {
     <<static>>
@@ -251,10 +276,11 @@ class LootGenerator {
 }
 
 LootGenerator ..> Monster
+LootGenerator ..> Item : returns
 LootGenerator ..> Weapon : creates
 LootGenerator ..> Armor : creates
 LootGenerator ..> Potion : creates
-LootGenerator --> IDiceRoller
+LootGenerator ..> IDiceRoller : uses parameter
 
 class IDiceRoller {
     <<Interface>>
@@ -270,8 +296,16 @@ class FixedDiceRoller {
     +Roll(int sides) int
 }
 
-RandomDiceRoller ..|> IDiceRoller
-FixedDiceRoller ..|> IDiceRoller
+IDiceRoller <|.. RandomDiceRoller
+IDiceRoller <|.. FixedDiceRoller
+
+Program ..> Party : creates
+Program ..> Warrior : creates
+Program ..> Rogue : creates
+Program ..> Wizard : creates
+Program ..> IDiceRoller : uses
+Program ..> RandomDiceRoller : creates
+Program ..> Adventure : creates and starts
 
 class CharacterIsDefeatedException {
     +CharacterIsDefeatedException(string message)
@@ -280,3 +314,6 @@ class CharacterIsDefeatedException {
 class InsufficientManaException {
     +InsufficientManaException(string message)
 }
+
+Monster ..> CharacterIsDefeatedException : throws
+```
