@@ -67,10 +67,21 @@ internal sealed class CombatActionResolver
         long defenseScore = (long)target.BaseDefense + target.Level +
             target.DefenseBonus;
 
+        // Natural 1 always misses and the die's maximum result always hits, so
+        // keep the displayed target within the range of rolls that can hit.
+        long requiredRoll = defenseScore - attacker.Level -
+            action.AttackRollModifier;
+        requiredRoll = Math.Max(requiredRoll, Math.Min(2, _attackDieSides));
+        requiredRoll = Math.Min(requiredRoll, _attackDieSides);
+
         // The die's maximum result is an automatic hit. For all other results,
         // one misses and the remaining rolls compare attack and defense scores.
         bool attackHits = roll == _attackDieSides ||
             (roll != 1 && attackScore >= defenseScore);
+
+        Console.WriteLine(
+            $"{attacker.Name} rolled {roll} for {action.Name} " +
+            $"(needed {requiredRoll}).");
 
         if (attackHits)
         {
