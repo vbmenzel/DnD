@@ -101,4 +101,14 @@ public abstract class Character : IDamageable
             HP = MaxHP;
         }
     }
+
+    public void EquipWeapon(Weapon weapon)
+    {
+        foreach (Weapon currentWeapon in Inventory.GetItems().OfType<Weapon>())
+        {
+            currentWeapon.Unequip();
+        }
+
+        weapon.Equip();
+    }
 }
