@@ -1,3 +1,6 @@
+# UML Diagram
+
+```mermaid
 classDiagram
 
 class Program {
@@ -253,12 +256,9 @@ IDiceRoller <|.. FixedDiceRoller
 %% =========================
 
 Party "1" o-- "0..*" Character : contains
-
 Character "1" *-- "1" Inventory : owns
-
 Inventory "1" o-- "0..*" Item : contains
 Inventory ..> EquipmentSlot : uses
-
 Potion ..> Character : heals
 
 
@@ -320,3 +320,4 @@ Wizard ..> InsufficientManaException : throws
 
 Encounter ..> CharacterIsDefeatedException : catches
 Encounter ..> InsufficientManaException : catches
+```
