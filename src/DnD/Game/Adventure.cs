@@ -16,19 +16,43 @@ internal sealed class Adventure
     private readonly Party _party;
     private readonly IDiceRoller _diceRoller;
 
+    // Tracking the encounter number here lets a later adventure continue at
+    // the same difficulty instead of restarting from the first encounter.
+    private int _encounterNumber;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="Adventure"/> class.
     /// </summary>
     /// <param name="party">The party undertaking the adventure.</param>
     /// <param name="diceRoller">The dice roller used during encounters.</param>
-    public Adventure(Party party, IDiceRoller diceRoller)
+    /// <param name="startingEncounterNumber">
+    /// The int-based number of the first encounter to fight. The default is 1.
+    /// </param>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// Thrown when <paramref name="startingEncounterNumber"/> is less than one.
+    /// </exception>
+    public Adventure(
+        Party party,
+        IDiceRoller diceRoller,
+        int startingEncounterNumber = 1)
     {
         ArgumentNullException.ThrowIfNull(party);
         ArgumentNullException.ThrowIfNull(diceRoller);
 
+        if (startingEncounterNumber < 1)
+        {
+            throw new ArgumentOutOfRangeException(nameof(startingEncounterNumber));
+        }
+
         _party = party;
         _diceRoller = diceRoller;
+        _encounterNumber = startingEncounterNumber;
     }
+
+    /// <summary>
+    /// Gets the number of the next encounter the party must face.
+    /// </summary>
+    public int NextEncounterNumber => _encounterNumber;
 
     /// <summary>
     /// Runs the encounters and travel scenes that make up the adventure.
@@ -39,25 +63,23 @@ internal sealed class Adventure
         Game.GameLogger.StartNewLog();
         Game.GameLogger.Log("The adventure begins!");
 
-        int encounterNumber = 1;
-
-        // There is deliberately no final encounter. The adventure continues
-        // until combat defeats every party member.
+        // The adventure continues until combat defeats every party member or,
+        // after every third encounter, the party returns to the tavern.
         while (true)
         {
             // Begin with combat; travel is shown only between encounters.
-            if (encounterNumber > 1)
+            if (_encounterNumber > 1)
             {
                 TravelNarrator.Narrate(_diceRoller);
             }
 
             IReadOnlyList<Monster> monsters = MonsterGenerator.Generate(
-                encounterNumber,
+                _encounterNumber,
                 _diceRoller);
             var encounter = new Encounter(_party, monsters, _diceRoller);
 
             Game.GameLogger.Log("");
-            Game.GameLogger.Log($"Encounter {encounterNumber} begins!");
+            Game.GameLogger.Log($"Encounter {_encounterNumber} begins!");
             EncounterResult result = encounter.Start();
 
             AwardExperience(result);
@@ -70,8 +92,45 @@ internal sealed class Adventure
                 return;
             }
 
-            encounterNumber++;
+            int completedEncounter = _encounterNumber;
+            _encounterNumber++;
+
+            if (completedEncounter % 3 == 0 && ShouldReturnToTavern())
+            {
+                Game.GameLogger.Log("The party returns to the tavern.");
+                return;
+            }
         }
+    }
+
+    /// <summary>
+    /// Asks the player whether the party should return to the tavern.
+    /// </summary>
+    /// <returns>
+    /// <see langword="true"/> when the party returns to the tavern; otherwise,
+    /// <see langword="false"/>.
+    /// </returns>
+    private static bool ShouldReturnToTavern()
+    {
+        Console.WriteLine();
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.WriteLine("The party can rest at the tavern...");
+        Console.ResetColor();
+
+        Console.WriteLine();
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.WriteLine("[1] >> Continue Adventuring");
+        Console.WriteLine("[2] >> Return to Tavern");
+        Console.ResetColor();
+
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.Write("Choose your path > ");
+        Console.ResetColor();
+
+        string? choice = Console.ReadLine();
+        Console.WriteLine();
+
+        return choice != null && choice.Trim() == "2";
     }
 
     /// <summary>

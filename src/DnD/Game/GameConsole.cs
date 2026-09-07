@@ -11,6 +11,10 @@ public static class GameConsole
 	{
 		bool running = true;
 
+		// Persists the combat difficulty across adventures so returning to the
+		// tavern and setting out again keeps the same encounter number.
+		int currentEncounterNumber = 1;
+
 		while (running)
 		{
 			Console.Clear();
@@ -64,9 +68,15 @@ public static class GameConsole
 
 					Console.WriteLine();
 
-					// Start a new adventure with the current party
-					var adventure = new Adventure(party, diceRoller);
+					// Start a new adventure with the current party, continuing
+					// from the last encounter number if one was already fought.
+					var adventure = new Adventure(
+						party,
+						diceRoller,
+						currentEncounterNumber);
 					adventure.Start();
+
+					currentEncounterNumber = adventure.NextEncounterNumber;
 
 					// Wait before returning to the main menu
 					Console.WriteLine();
@@ -244,7 +254,20 @@ public static class GameConsole
 				// Display every item with information based on its type
 				foreach (var item in items)
 				{
-					Console.Write(" > ");
+					bool equipped =
+						ReferenceEquals(character.Inventory.GetEquippedItem(EquipmentSlot.Weapon), item) ||
+						ReferenceEquals(character.Inventory.GetEquippedItem(EquipmentSlot.Armor), item);
+
+					if (equipped)
+					{
+						Console.ForegroundColor = ConsoleColor.Yellow;
+						Console.Write(" > ");
+						Console.ResetColor();
+					}
+					else
+					{
+						Console.Write("   ");
+					}
 
 					switch (item)
 					{
@@ -252,6 +275,13 @@ public static class GameConsole
 							Console.ForegroundColor = ConsoleColor.Red;
 							Console.Write($"{weapon.Name}");
 							Console.ResetColor();
+							if (equipped)
+							{
+								Console.Write("  ");
+								Console.ForegroundColor = ConsoleColor.Yellow;
+								Console.Write("[EQUIPPED]");
+								Console.ResetColor();
+							}
 							Console.WriteLine($"  [Weapon | Damage +{weapon.DamageBonus}]");
 							break;
 
@@ -259,6 +289,13 @@ public static class GameConsole
 							Console.ForegroundColor = ConsoleColor.Blue;
 							Console.Write($"{armor.Name}");
 							Console.ResetColor();
+							if (equipped)
+							{
+								Console.Write("  ");
+								Console.ForegroundColor = ConsoleColor.Yellow;
+								Console.Write("[EQUIPPED]");
+								Console.ResetColor();
+							}
 							Console.WriteLine($"  [Armor | Defense +{armor.DefenseBonus}]");
 							break;
 
