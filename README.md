@@ -1,16 +1,11 @@
-# \## UML Diagram
+# DnD Console Game
 
-# 
+A console-based Dungeons & Dragons inspired adventure game developed in C#.
 
-# The UML diagram shows the structure of the DnD application, including
+## UML Diagram
 
-# classes, inheritance, interfaces, relationships and cardinalities.
+The UML diagram shows the structure of the DnD application, including classes, inheritance, interfaces, relationships and cardinalities.
 
-# 
+![DnD UML Diagram](docs/UML.png)
 
-# !\[DnD UML Diagram](docs/UML.png)
-
-# 
-
-# For the complete UML source, see \[UML.md](docs/UML.md).
-
+For the complete UML source, see [UML.md](docs/UML.md).
