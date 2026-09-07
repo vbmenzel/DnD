@@ -14,6 +14,7 @@ namespace DnD.Items
 
 		public void Use(Character target)
 		{
+			Game.Animation.PotionAnimation();
 			target.Heal(HealAmount);
 		}
 	}

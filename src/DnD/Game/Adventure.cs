@@ -35,7 +35,9 @@ internal sealed class Adventure
     /// </summary>
     public void Start()
     {
-        Console.WriteLine("The adventure begins!");
+
+        Game.GameLogger.StartNewLog();
+        Game.GameLogger.Log("The adventure begins!");
 
         int encounterNumber = 1;
 
@@ -54,8 +56,8 @@ internal sealed class Adventure
                 _diceRoller);
             var encounter = new Encounter(_party, monsters, _diceRoller);
 
-            Console.WriteLine();
-            Console.WriteLine($"Encounter {encounterNumber} begins!");
+            Game.GameLogger.Log("");
+            Game.GameLogger.Log($"Encounter {encounterNumber} begins!");
             EncounterResult result = encounter.Start();
 
             AwardExperience(result);
@@ -64,7 +66,7 @@ internal sealed class Adventure
 
             if (!result.PartyWon)
             {
-                Console.WriteLine("The adventure has come to an end.");
+                Game.GameLogger.Log("The adventure has come to an end.");
                 return;
             }
 
@@ -93,7 +95,7 @@ internal sealed class Adventure
             return;
         }
 
-        Console.WriteLine(
+        Game.GameLogger.Log(
             $"The surviving party members gain {experience} XP each.");
 
         // Giving every survivor the full reward keeps individual progression
@@ -151,7 +153,7 @@ internal sealed class Adventure
                 continue;
             }
 
-            Console.WriteLine(
+            Game.GameLogger.Log(
                 $"{character.Name} recovers {restoredMana} mana.");
         }
     }
@@ -182,6 +184,6 @@ internal sealed class Adventure
             _diceRoller.Roll(livingMembers.Count) - 1];
 
         recipient.Inventory.AddItem(item);
-        Console.WriteLine($"{recipient.Name} receives {item.Name}.");
+        Game.GameLogger.Log($"{recipient.Name} receives {item.Name}.");
     }
 }

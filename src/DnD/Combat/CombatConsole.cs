@@ -23,13 +23,13 @@ internal static class CombatConsole
             ? $", {spellcaster.CurrentMana} mana"
             : string.Empty;
 
-        Console.WriteLine();
-        Console.WriteLine(
+        Game.GameLogger.Log("");
+        Game.GameLogger.Log(
             $"{character.Name}'s turn ({character.HP}/{character.MaxHP} HP{manaStatus}):");
 
         for (int index = 0; index < actions.Count; index++)
         {
-            Console.WriteLine($"{index + 1}. {actions[index].Name}");
+            Game.GameLogger.Log($"{index + 1}. {actions[index].Name}");
         }
 
         int selectedIndex = ReadSelection(actions.Count);
@@ -43,12 +43,12 @@ internal static class CombatConsole
     /// <returns>The selected character.</returns>
     public static Character SelectTarget(IReadOnlyList<Character> targets)
     {
-        Console.WriteLine("Choose a target:");
+        Game.GameLogger.Log("Choose a target:");
 
         for (int index = 0; index < targets.Count; index++)
         {
             Character target = targets[index];
-            Console.WriteLine(
+            Game.GameLogger.Log(
                 $"{index + 1}. {target.Name} ({target.HP}/{target.MaxHP} HP)");
         }
 
@@ -68,7 +68,7 @@ internal static class CombatConsole
     {
         while (true)
         {
-            Console.Write("> ");
+            Game.GameLogger.Log("> ");
             string input = Console.ReadLine()
                 ?? throw new InvalidOperationException(
                     "Cannot select a combat action because input is unavailable.");
@@ -80,7 +80,7 @@ internal static class CombatConsole
                 return selection - 1;
             }
 
-            Console.WriteLine($"Enter a number between 1 and {optionCount}.");
+            Game.GameLogger.Log($"Enter a number between 1 and {optionCount}.");
         }
     }
 }

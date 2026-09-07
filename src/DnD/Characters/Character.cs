@@ -112,10 +112,11 @@ public abstract class Character : IDamageable
         int healthBeforeHealing = target.HP;
 
         potion.Use(target);
+        Console.Clear();
         Inventory.RemoveItem(potion);
 
         int restoredHealth = target.HP - healthBeforeHealing;
-        Console.WriteLine(
+        Game.GameLogger.Log(
             $"{Name} uses {potion.Name} on {target}, restoring {restoredHealth} health!");
     }
 
@@ -185,7 +186,7 @@ public abstract class Character : IDamageable
             Xp -= ExperienceRequiredForNextLevel;
             Level++;
 
-            Console.WriteLine($"{Name} reached level {Level}!");
+            Game.GameLogger.Log($"{Name} reached level {Level}!");
         }
     }
 }

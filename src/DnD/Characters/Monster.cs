@@ -54,7 +54,7 @@ public class Monster : Character
 
         int damage = Math.Max(BaseAttack + DamageBonus, 0);
         target.TakeDamage(damage);
-        Console.WriteLine($"{Name} attacks {target} for {damage} damage!");
+        Game.GameLogger.Log($"{Name} attacks {target} for {damage} damage!");
     }
 
     /// <inheritdoc />

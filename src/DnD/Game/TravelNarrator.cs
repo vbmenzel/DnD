@@ -39,8 +39,8 @@ internal static class TravelNarrator
         int messageCount = MinimumTravelMessages + diceRoller.Roll(
             MaximumTravelMessages - MinimumTravelMessages + 1) - 1;
 
-        Console.WriteLine();
-        Console.WriteLine("The party continues its journey...");
+        Game.GameLogger.Log("");
+        Game.GameLogger.Log("The party continues its journey...");
 
         for (int messageIndex = 0;
              messageIndex < messageCount;
@@ -49,7 +49,7 @@ internal static class TravelNarrator
             Delay(diceRoller);
 
             int selectedIndex = diceRoller.Roll(availableMessages.Count) - 1;
-            Console.WriteLine(availableMessages[selectedIndex]);
+            Game.GameLogger.Log(availableMessages[selectedIndex]);
             availableMessages.RemoveAt(selectedIndex);
         }
 
