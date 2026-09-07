@@ -76,7 +76,7 @@ public class Wizard : Character, ISpellcaster
             0);
 
         target.TakeDamage(damage);
-        Console.WriteLine(
+        Game.GameLogger.Log(
             $"{Name} casts a spell on {target} for {damage} damage!");
     }
 
@@ -120,7 +120,7 @@ public class Wizard : Character, ISpellcaster
         int damage = Math.Max((BaseAttack + DamageBonus) / 2, 0);
 
         target.TakeDamage(damage);
-        Console.WriteLine(
+        Game.GameLogger.Log(
             $"{Name} strikes {target} with a staff for {damage} damage!");
     }
 }

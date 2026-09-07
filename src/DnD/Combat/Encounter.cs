@@ -154,15 +154,15 @@ public class Encounter
         }
         catch (CharacterIsDefeatedException exception)
         {
-            Console.WriteLine(exception.Message);
+            Game.GameLogger.Log(exception.Message);
         }
         catch (InsufficientManaException exception)
         {
-            Console.WriteLine(exception.Message);
+            Game.GameLogger.Log(exception.Message);
         }
         catch (Exception exception)
         {
-            Console.WriteLine(exception.Message);
+            Game.GameLogger.Log(exception.Message);
         }
     }
 
@@ -262,6 +262,6 @@ public class Encounter
             ? "The party won the encounter!"
             : "The monsters won the encounter!";
 
-        Console.WriteLine(result);
+        Game.GameLogger.Log(result);
     }
 }

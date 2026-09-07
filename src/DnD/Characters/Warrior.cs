@@ -20,7 +20,7 @@ public class Warrior: Character
         int damage = BaseAttack + DamageBonus;
         if (damage < 0) damage = 0; // Ensure damage is not negative
         target.TakeDamage(damage);
-        Console.WriteLine($"{Name} attacks {target} for {damage} damage!"); //overvej at skrive overkill eller noget hvis mm
+        Game.GameLogger.Log($"{Name} attacks {target} for {damage} damage!"); //overvej at skrive overkill eller noget hvis mm
     }
 
     /// <inheritdoc />
@@ -50,7 +50,7 @@ public class Warrior: Character
     {
         int damage = Math.Max(BaseAttack + DamageBonus + Level, 0);
         target.TakeDamage(damage);
-        Console.WriteLine($"{Name} uses a heavy attack on {target} for {damage} damage!");
+        Game.GameLogger.Log($"{Name} uses a heavy attack on {target} for {damage} damage!");
     }
 
 }

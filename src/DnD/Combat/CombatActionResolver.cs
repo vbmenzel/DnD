@@ -79,7 +79,7 @@ internal sealed class CombatActionResolver
         bool attackHits = roll == _attackDieSides ||
             (roll != 1 && attackScore >= defenseScore);
 
-        Console.WriteLine(
+        Game.GameLogger.Log(
             $"{attacker.Name} rolled {roll} for {action.Name} " +
             $"(needed {requiredRoll}).");
 
@@ -90,7 +90,7 @@ internal sealed class CombatActionResolver
             return;
         }
 
-        Console.WriteLine(
+        Game.GameLogger.Log(
             $"{attacker.Name} missed {target.Name} with {action.Name}.");
     }
 
@@ -102,7 +102,7 @@ internal sealed class CombatActionResolver
     {
         if (target.IsDefeated)
         {
-            Console.WriteLine($"{target} has been defeated!");
+            Game.GameLogger.Log($"{target} has been defeated!");
         }
     }
 }
