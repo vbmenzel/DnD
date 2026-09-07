@@ -112,6 +112,7 @@ public abstract class Character : IDamageable
         int healthBeforeHealing = target.HP;
 
         potion.Use(target);
+        Console.Clear();
         Inventory.RemoveItem(potion);
 
         int restoredHealth = target.HP - healthBeforeHealing;
