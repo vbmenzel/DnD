@@ -10,6 +10,7 @@ class Program {
     <<static>>
     -Main()
     -CreateParty() Party
+    -ShowParty(Party party)
 }
 
 class Character {
