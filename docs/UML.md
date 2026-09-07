@@ -1,16 +1,17 @@
-# Everything UML Diagram
-
-This is the complete class diagram. For a less dense entry point, see the
-[readable UML guide](UML-Overview.md), which links to smaller connected views.
-
-```mermaid
 classDiagram
 
 class Program {
     <<static>>
     -Main()
     -CreateParty() Party
+}
+
+class GameConsole {
+    <<static>>
+    +Start(Party party, IDiceRoller diceRoller)
     -ShowParty(Party party)
+    -ShowInventory(Party party)
+    -ShowHowToPlay()
 }
 
 class Character {
@@ -66,6 +67,13 @@ class Rogue {
     -SneakAttack(Character target)
 }
 
+class Monster {
+    -int ExperienceRewardPerLevel
+    +int ExperienceReward
+    +Attack(IDamageable target)
+    #GetClassCombatActions() IReadOnlyList~CombatAction~
+}
+
 class IDamageable {
     <<Interface>>
     +int CurrentHealth
@@ -81,26 +89,23 @@ class ISpellcaster {
     +RestoreMana(int amount)
 }
 
-class Monster {
-    -int ExperienceRewardPerLevel
-    +int ExperienceReward
-    +Attack(IDamageable target)
-    #GetClassCombatActions() IReadOnlyList~CombatAction~
+class IDiceRoller {
+    <<Interface>>
+    +Roll(int sides) int
 }
 
-Character <|-- Warrior
-Character <|-- Wizard
-Character <|-- Rogue
-Character <|-- Monster
+class RandomDiceRoller {
+    +Roll(int sides) int
+}
 
-IDamageable <|.. Character
-ISpellcaster <|.. Wizard
-ISpellcaster ..> IDamageable : targets
-Wizard ..> InsufficientManaException : throws
+class FixedDiceRoller {
+    +int FixedValue
+    +Roll(int sides) int
+}
 
 class CombatAction {
     -Action~Character~ _execute
-    -Func~Character, bool~ _canTarget
+    -Func~Character,bool~ _canTarget
     +string Name
     +CombatTargetType TargetType
     +bool RequiresAttackRoll
@@ -116,10 +121,6 @@ class CombatTargetType {
     Self
 }
 
-Character ..> CombatAction : creates and returns
-CombatAction ..> Character : targets
-CombatAction ..> CombatTargetType : uses
-
 class Party {
     -List~Character~ members
     +AddMember(Character character)
@@ -127,11 +128,9 @@ class Party {
     +GetMembers() IReadOnlyList~Character~
 }
 
-Party "0..*" o-- "0..*" Character : contains
-
 class Inventory {
     -List~Item~ items
-    -Dictionary~EquipmentSlot, Item~ _equippedItems
+    -Dictionary~EquipmentSlot,Item~ _equippedItems
     +AddItem(Item item)
     +RemoveItem(Item item)
     +GetItems() IReadOnlyList~Item~
@@ -164,15 +163,6 @@ class Potion {
     +Use(Character target)
 }
 
-Item <|-- Weapon
-Item <|-- Armor
-Item <|-- Potion
-
-Character "0..1" *-- "1" Inventory : owns
-Inventory "0..*" o-- "0..*" Item : contains
-Inventory ..> EquipmentSlot : uses
-Potion ..> Character : heals
-
 class Encounter {
     -int DefaultAttackDieSides
     -Party _party
@@ -181,132 +171,48 @@ class Encounter {
     +Start() EncounterResult
     +PlayerTurn()
     +MonsterTurn()
-    -ResolveAction(Character attacker, CombatAction action, Character target)
-    -GetUsableActions(Character character) IReadOnlyList~CombatAction~
+    -ResolveAction(Character actor, CombatAction action)
+    -GetUsableActions(Character actor) IReadOnlyList~CombatAction~
     -SelectTarget(Character actor, CombatAction action) Character
-    -GetValidTargets(Character actor, CombatAction action) IReadOnlyList~Character~
+    -GetValidTargets(Character actor, CombatAction action) List~Character~
     -IsPartyDefeated() bool
     -AreMonstersDefeated() bool
-    -DisplayResult(bool partyWon)
+    -DisplayResult(EncounterResult result)
 }
-
-Encounter "0..*" --> "1" Party : retains
-Encounter "0..*" o-- "1..*" Monster : retains opponents
-Encounter "0..1" *-- "1" CombatActionResolver : owns
-Encounter ..> EncounterResult : creates
-Encounter ..> CombatAction : selects
-Encounter ..> IDiceRoller : receives
-Encounter ..> CharacterIsDefeatedException : catches
-Encounter ..> InsufficientManaException : catches
 
 class EncounterResult {
-    +bool PartyWon
-    +IReadOnlyList~Monster~ DefeatedMonsters
+    <<enumeration>>
+    Victory
+    Defeat
 }
-
-EncounterResult "0..*" o-- "0..*" Monster : retains defeated
 
 class CombatActionResolver {
     -IDiceRoller _diceRoller
     -int _attackDieSides
-    +Resolve(Character attacker, CombatAction action, Character target)
-    -DisplayDefeatIfNeeded(Character target)
+    +Resolve(Character actor, CombatAction action, Character target)
 }
 
 class CombatConsole {
     <<static>>
-    +SelectAction(Character character, IReadOnlyList~CombatAction~ actions) CombatAction
-    +SelectTarget(IReadOnlyList~Character~ targets) Character
-    -ReadSelection(int optionCount) int
 }
-
-Encounter ..> CombatConsole : calls
-CombatConsole ..> ISpellcaster : reads mana
-CombatActionResolver "0..*" --> "1" IDiceRoller : retains
-CombatActionResolver ..> CharacterIsDefeatedException : throws
 
 class Adventure {
     -Party _party
     -IDiceRoller _diceRoller
     +Start()
-    -AwardExperience(EncounterResult result)
-    -AwardLoot(EncounterResult result)
-    -RestorePartyMana()
-    -CalculateExperienceReward(EncounterResult result) int
-    -GetLivingPartyMembers() IReadOnlyList~Character~
 }
-
-Adventure "0..*" --> "1" Party : retains
-Adventure "0..*" --> "1" IDiceRoller : retains
-Adventure ..> Encounter : creates and runs
-Adventure ..> EncounterResult : processes
-Adventure ..> MonsterGenerator : calls
-Adventure ..> LootGenerator : calls
-Adventure ..> TravelNarrator : calls
 
 class MonsterGenerator {
     <<static>>
-    -int MaximumMonsterCount
-    -int MaximumMonsterLevel
-    -string[] MonsterNames
-    +Generate(int encounterNumber, IDiceRoller diceRoller) IReadOnlyList~Monster~
 }
 
 class TravelNarrator {
     <<static>>
-    -int MinimumTravelMessages
-    -int MaximumTravelMessages
-    -int MinimumTravelDelayMilliseconds
-    -int MaximumTravelDelayMilliseconds
-    -string[] TravelMessages
-    +Narrate(IDiceRoller diceRoller)
-    -Delay(IDiceRoller diceRoller)
 }
-
-MonsterGenerator ..> Monster : creates
-MonsterGenerator ..> IDiceRoller : uses parameter
-TravelNarrator ..> IDiceRoller : uses parameter
 
 class LootGenerator {
     <<static>>
-    -int LootTypeCount
-    +Generate(IReadOnlyList~Monster~ defeatedMonsters, IDiceRoller diceRoller) Item?
-    -CreateWeapon(int monsterLevel, IDiceRoller diceRoller) Weapon
-    -CreateArmor(int monsterLevel, IDiceRoller diceRoller) Armor
-    -CreatePotion(int monsterLevel, IDiceRoller diceRoller) Potion
 }
-
-LootGenerator ..> Monster
-LootGenerator ..> Item : returns
-LootGenerator ..> Weapon : creates
-LootGenerator ..> Armor : creates
-LootGenerator ..> Potion : creates
-LootGenerator ..> IDiceRoller : uses parameter
-
-class IDiceRoller {
-    <<Interface>>
-    +Roll(int sides) int
-}
-
-class RandomDiceRoller {
-    +Roll(int sides) int
-}
-
-class FixedDiceRoller {
-    +int FixedValue
-    +Roll(int sides) int
-}
-
-IDiceRoller <|.. RandomDiceRoller
-IDiceRoller <|.. FixedDiceRoller
-
-Program ..> Party : creates
-Program ..> Warrior : creates
-Program ..> Rogue : creates
-Program ..> Wizard : creates
-Program ..> IDiceRoller : uses
-Program ..> RandomDiceRoller : creates
-Program ..> Adventure : creates and starts
 
 class CharacterIsDefeatedException {
     +CharacterIsDefeatedException(string message)
@@ -316,5 +222,101 @@ class InsufficientManaException {
     +InsufficientManaException(string message)
 }
 
-Monster ..> CharacterIsDefeatedException : throws
-```
+
+%% =========================
+%% INHERITANCE
+%% =========================
+
+Character <|-- Warrior
+Character <|-- Rogue
+Character <|-- Wizard
+Character <|-- Monster
+
+Item <|-- Weapon
+Item <|-- Armor
+Item <|-- Potion
+
+
+%% =========================
+%% INTERFACES
+%% =========================
+
+IDamageable <|.. Character
+ISpellcaster <|.. Wizard
+
+IDiceRoller <|.. RandomDiceRoller
+IDiceRoller <|.. FixedDiceRoller
+
+
+%% =========================
+%% PARTY / INVENTORY
+%% =========================
+
+Party "1" o-- "0..*" Character : contains
+
+Character "1" *-- "1" Inventory : owns
+
+Inventory "1" o-- "0..*" Item : contains
+Inventory ..> EquipmentSlot : uses
+
+Potion ..> Character : heals
+
+
+%% =========================
+%% COMBAT ACTIONS
+%% =========================
+
+Character ..> CombatAction : creates
+CombatAction ..> Character : targets
+CombatAction ..> CombatTargetType : uses
+
+
+%% =========================
+%% ENCOUNTER / COMBAT
+%% =========================
+
+Encounter "1" --> "1" Party : uses
+Encounter "1" o-- "1..*" Monster : contains
+Encounter "1" *-- "1" CombatActionResolver : has
+
+Encounter ..> EncounterResult : returns
+Encounter ..> CombatAction : resolves
+
+CombatActionResolver "1" --> "1" IDiceRoller : uses
+CombatActionResolver ..> CombatAction : resolves
+CombatActionResolver ..> Character : targets
+
+
+%% =========================
+%% GAME FLOW
+%% =========================
+
+Program ..> Party : creates
+Program ..> Warrior : creates
+Program ..> Rogue : creates
+Program ..> Wizard : creates
+Program ..> IDiceRoller : uses
+Program ..> RandomDiceRoller : creates
+Program ..> GameConsole : starts
+
+GameConsole ..> Party : uses
+GameConsole ..> IDiceRoller : uses
+GameConsole ..> Adventure : creates and starts
+
+Adventure "1" --> "1" Party : uses
+Adventure "1" --> "1" IDiceRoller : uses
+Adventure ..> Encounter : creates
+Adventure ..> MonsterGenerator : uses
+Adventure ..> TravelNarrator : uses
+Adventure ..> LootGenerator : uses
+
+
+%% =========================
+%% EXCEPTIONS
+%% =========================
+
+Character ..> CharacterIsDefeatedException : throws
+Wizard ..> InsufficientManaException : throws
+
+Encounter ..> CharacterIsDefeatedException : catches
+Encounter ..> InsufficientManaException : catches
