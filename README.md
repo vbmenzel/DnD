@@ -1,81 +1,75 @@
-# Potential classes or Interfaces
+# DnD Console Game
 
-Character - abstract
+A console-based Dungeons & Dragons inspired adventure game developed in C#.
 
-int HP (get, Private set)
+The project demonstrates object-oriented programming concepts such as
+inheritance, polymorphism, interfaces, encapsulation, collections,
+custom exceptions and dependency injection.
 
-int Max HP (get, Private set)
+## Features
 
-string Name (get, Private set)
+- Turn-based combat
+- Party with Warrior, Rogue and Wizard
+- Different character abilities
+- Multiple monsters and target selection
+- Experience and level-up system
+- Inventory system
+- Weapons, armor and potions
+- Equipment system using Dictionary
+- Dice rolling through IDiceRoller
+- RandomDiceRoller and FixedDiceRoller
+- Custom exceptions
+- Interactive console menu
 
-int Level (get, Private set)
+## How to Play
 
-int xp (get, Private set)
+Run the application and choose an option from the main menu:
 
-int AttackPower (get, Private set)
+1. Begin Adventure
+2. View Party
+3. View Inventory
+4. How to Play
+5. Exit Game
 
-public Attack(IDamageable target)
+During combat, enter the number of the action you want to use and then
+choose a target when required.
 
-punlic TakeDamage(int amount)
+Defeat monsters to progress through the adventure, earn experience and
+collect loot.
 
-public Heal(int amount)
+## Characters
 
-internal AddstatusEffect(StatusEffect effect)
+### Warrior
+A strong melee character with access to Heavy Attack.
 
-protected CalculatelncomingDamage(int amount)
+### Rogue
+A fast physical attacker with access to Sneak Attack.
 
----
+### Wizard
+A spellcaster who uses mana to cast spells.
 
+## UML Diagram
 
-Warrior : Character
+The UML diagram shows the structure of the application, including
+classes, inheritance, interfaces, relationships and cardinalities.
 
-Wizard : Character
+![DnD UML Diagram](docs/UML.png)
 
-Rogue : Character
+For the complete UML source, see [UML.md](docs/UML.md).
 
-Monster : Character
+## Project Structure
 
----
+- `Characters` - Character classes such as Warrior, Rogue, Wizard and Monster
+- `Combat` - Combat system, actions, dice and exceptions
+- `Game` - Adventure flow, menu, loot and monster generation
+- `Interfaces` - IDamageable, ISpellcaster and IDiceRoller
+- `Items` - Inventory, weapons, armor and potions
+- `Parties` - Party management
+- `tests` - Automated tests
 
-Party
+## Technologies
 
-Encounter
-
-StatusEffect - abstract 
-
-PoisonEffect : StatusEffect
-
-AttackBoostEffect : StatusEffect
-
-Item - abstract +
-
-Weapon : Item
-
-Armor : Item
-
-Potion : Item
-
-
-## Interfaces
----
-
-ISpellcaster
-
-public CurrentMana int
-
-public CastSpell(target: IDamageable)
-
----
-
-IDamageable
-
-public CurrentHealth int public
-public (derived)IsDefeated bool
-
----
-
-IDiceRoller
-
-public Roll(int sides)
-
----
+- C#
+- .NET
+- Git / GitHub
+- Mermaid UML

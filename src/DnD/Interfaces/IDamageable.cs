@@ -1,6 +1,6 @@
-namespace DnD;
+namespace DnD.Interfaces;
 
-/// <summary>Defines the contract for entities that can receive and take damage.</summary>
+/// <summary>Defines the contract for entities that can take damage.</summary>
 public interface IDamageable
 {
     /// <summary>Gets the current health points of the entity.</summary>
