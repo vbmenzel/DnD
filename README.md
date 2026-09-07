@@ -1,5 +1,16 @@
-# Submission Documentation
+# \## UML Diagram
 
-- [Readable UML guide](docs/UML-Overview.md) - start here for an overview and focused diagrams
-- [Everything UML diagram](docs/UML.md) - canonical diagram with all project classes and their main relationships
-- [Design decisions](docs/DesignDecisions.md)
+# 
+
+# The UML diagram shows the structure of the DnD application, including
+
+# classes, inheritance, interfaces, relationships and cardinalities.
+
+# 
+
+# !\[DnD UML Diagram](docs/UML.png)
+
+# 
+
+# For the complete UML source, see \[UML.md](docs/UML.md).
+
