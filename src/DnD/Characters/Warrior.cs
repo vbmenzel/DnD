@@ -20,6 +20,7 @@ public class Warrior: Character
         int damage = BaseAttack + DamageBonus;
         if (damage < 0) damage = 0; // Ensure damage is not negative
         target.TakeDamage(damage);
+        Game.Animation.AttackAnimation();
         Game.GameLogger.Log($"{Name} attacks {target} for {damage} damage!"); //overvej at skrive overkill eller noget hvis mm
     }
 
