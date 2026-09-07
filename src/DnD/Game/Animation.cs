@@ -9,7 +9,7 @@ namespace DnD.Game
     internal class Animation
     {
 
-        public static void AttackAnimation() 
+        public static void AttackAnimation()
         {
             string[] frames =
                 {
@@ -85,7 +85,7 @@ namespace DnD.Game
 
                     ""
 
-                    
+
 
                 };
             foreach (string frame in frames)
@@ -105,7 +105,7 @@ namespace DnD.Game
                    "" +
                    "",
 
-                   
+
                    "   |   |" +
                    "\n   \\__/" +
                    "" +
@@ -201,6 +201,59 @@ namespace DnD.Game
                 System.Threading.Thread.Sleep(100);
             }
             Console.Clear();
+        }
+
+        public static void PotionAnimation()
+        {
+            string[] frames =
+                {
+                    "  _ _" +
+                    "\n /   \\" +
+                    "\n|     |" +
+                    "\n \\   /" +
+                    "\n  | |" +
+                    "\n  | |" +
+                    "\n /   \\" +
+                    "\n/~~~~~\\" +
+                    "\n| o     |" +
+                    "\n|    o  |" +
+                    "\n\\_o___/",
+
+                    "        __" +
+                    "\n       /  \\_" +
+                    "\n      /    /" +
+                    "\n   __/    /" +
+                    "\n  /~~~~~~/" +
+                    "\n /  o    |" +
+                    "\n/     o  |" +
+                    "\n\\  o    /" +
+                    "\n \\   o /" +
+                    "\n  \\___/",
+
+                    "  ___    _" +
+                    "\n /~~~\\__/~\\" +
+                    "\n| o      o |" +
+                    "\n|   o __   |" +
+                    "\n \\___/  \\_/",
+
+                    "  ___    _" +
+                    "\n /   \\__/ \\" +
+                    "\n|~~~~~~~~~~|"  +
+                    "\n| o   __ o |"  +
+                    "\n \\___/  \\_/",
+
+                    "  ___    _ "+
+                    "\n /   \\__/ \\ "+
+                    "\n|          | "+
+                    "\n|~~~~~__~~~| "+
+                    "\n \\_o_/  \\_/"
+                };
+            foreach (string frame in frames)
+            {
+                Console.Clear();
+                Console.WriteLine(frame);
+                System.Threading.Thread.Sleep(100);
+            }
         }
     }
 }
