@@ -11,6 +11,10 @@ public static class GameConsole
 	{
 		bool running = true;
 
+		// Persists the combat difficulty across adventures so returning to the
+		// tavern and setting out again keeps the same encounter number.
+		int currentEncounterNumber = 1;
+
 		while (running)
 		{
 			Console.Clear();
@@ -64,9 +68,15 @@ public static class GameConsole
 
 					Console.WriteLine();
 
-					// Start a new adventure with the current party
-					var adventure = new Adventure(party, diceRoller);
+					// Start a new adventure with the current party, continuing
+					// from the last encounter number if one was already fought.
+					var adventure = new Adventure(
+						party,
+						diceRoller,
+						currentEncounterNumber);
 					adventure.Start();
+
+					currentEncounterNumber = adventure.NextEncounterNumber;
 
 					// Wait before returning to the main menu
 					Console.WriteLine();
