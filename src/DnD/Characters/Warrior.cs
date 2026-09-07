@@ -51,6 +51,7 @@ public class Warrior: Character
     {
         int damage = Math.Max(BaseAttack + DamageBonus + Level, 0);
         target.TakeDamage(damage);
+        Game.Animation.HeavyAttackAnimation();
         Game.GameLogger.Log($"{Name} uses a heavy attack on {target} for {damage} damage!");
     }
 
