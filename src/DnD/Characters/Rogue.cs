@@ -32,6 +32,8 @@ public class Rogue : Character
         target.TakeDamage(firstStrikeDamage);
         target.TakeDamage(followUpDamage);
 
+        Game.Animation.DoubleAttackAnimation();
+        Console.Clear();
         Game.GameLogger.Log(
             $"{Name} strikes {target} twice for {totalDamage} total damage!");
     }
@@ -63,6 +65,8 @@ public class Rogue : Character
     {
         int damage = Math.Max(BaseAttack + DamageBonus + (Level * 2), 0);
         target.TakeDamage(damage);
+        Game.Animation.SneakAttackAnimation();
+        Console.Clear( );
         Game.GameLogger.Log($"{Name} sneak attacks {target} for {damage} damage!");
     }
 

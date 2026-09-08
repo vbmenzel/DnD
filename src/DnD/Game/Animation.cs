@@ -255,5 +255,353 @@ namespace DnD.Game
                 System.Threading.Thread.Sleep(100);
             }
         }
+
+        public static void SpellAnimation()
+        {
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("         ▓▓");
+            Console.WriteLine("         ▓▓");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Thread.Sleep(50);
+            Console.Clear();
+
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("         ▓▓");
+            Console.WriteLine("        ▓  ▓");
+            Console.WriteLine("        ▓  ▓");
+            Console.WriteLine("         ▓▓");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Thread.Sleep(50);
+            Console.Clear();
+
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("         ▓▓");
+            Console.WriteLine("        ▓  ▓");
+            Console.WriteLine("       ▓    ▓");
+            Console.WriteLine("       ▓    ▓");
+            Console.WriteLine("        ▓  ▓");
+            Console.WriteLine("         ▓▓");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Thread.Sleep(50);
+            Console.Clear();
+
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("         ▓▓");
+            Console.WriteLine("        ▓  ▓");
+            Console.WriteLine("       ▓    ▓");
+            Console.WriteLine("      ▓      ▓");
+            Console.WriteLine("      ▓      ▓");
+            Console.WriteLine("       ▓    ▓");
+            Console.WriteLine("        ▓  ▓");
+            Console.WriteLine("         ▓▓");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Thread.Sleep(50);
+            Console.Clear();
+
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("         ▓▓");
+            Console.WriteLine("        ▓  ▓");
+            Console.WriteLine("       ▓    ▓");
+            Console.WriteLine("      ▓      ▓");
+            Console.WriteLine("     ▓   ▓▓   ▓");
+            Console.WriteLine("     ▓   ▓▓   ▓");
+            Console.WriteLine("      ▓      ▓");
+            Console.WriteLine("       ▓    ▓");
+            Console.WriteLine("        ▓  ▓");
+            Console.WriteLine("         ▓▓");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Thread.Sleep(50);
+            Console.Clear();
+
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("         ▓▓");
+            Console.WriteLine("        ▓  ▓");
+            Console.WriteLine("       ▓    ▓");
+            Console.WriteLine("      ▓      ▓");
+            Console.WriteLine("     ▓   ▓▓   ▓");
+            Console.WriteLine("    ▓   ▓  ▓   ▓");
+            Console.WriteLine("    ▓   ▓  ▓   ▓");
+            Console.WriteLine("     ▓   ▓▓   ▓");
+            Console.WriteLine("      ▓      ▓");
+            Console.WriteLine("       ▓    ▓");
+            Console.WriteLine("        ▓  ▓");
+            Console.WriteLine("         ▓▓");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Thread.Sleep(50);
+            Console.Clear();
+
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("         ▓▓");
+            Console.WriteLine("        ▓  ▓");
+            Console.WriteLine("       ▓    ▓");
+            Console.WriteLine("      ▓      ▓");
+            Console.WriteLine("     ▓   ▓▓   ▓");
+            Console.WriteLine("    ▓   ▓  ▓   ▓");
+            Console.WriteLine("   ▓   ▓    ▓   ▓");
+            Console.WriteLine("   ▓   ▓    ▓   ▓");
+            Console.WriteLine("    ▓   ▓  ▓   ▓");
+            Console.WriteLine("     ▓   ▓▓   ▓");
+            Console.WriteLine("      ▓      ▓");
+            Console.WriteLine("       ▓    ▓");
+            Console.WriteLine("        ▓  ▓");
+            Console.WriteLine("         ▓▓");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Thread.Sleep(50);
+            Console.Clear();
+
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("         ▓▓");
+            Console.WriteLine("        ▓  ▓");
+            Console.WriteLine("       ▓    ▓");
+            Console.WriteLine("      ▓      ▓");
+            Console.WriteLine("     ▓   ▓▓   ▓");
+            Console.WriteLine("    ▓   ▓  ▓   ▓");
+            Console.WriteLine("   ▓   ▓    ▓   ▓");
+            Console.WriteLine("  ▓   ▓      ▓   ▓");
+            Console.WriteLine("  ▓   ▓      ▓   ▓");
+            Console.WriteLine("   ▓   ▓    ▓   ▓");
+            Console.WriteLine("    ▓   ▓  ▓   ▓");
+            Console.WriteLine("     ▓   ▓▓   ▓");
+            Console.WriteLine("      ▓      ▓");
+            Console.WriteLine("       ▓    ▓");
+            Console.WriteLine("        ▓  ▓");
+            Console.WriteLine("         ▓▓");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Thread.Sleep(50);
+            Console.Clear();
+
+            Console.WriteLine("");
+            Console.WriteLine("         ▓▓");
+            Console.WriteLine("        ▓  ▓");
+            Console.WriteLine("       ▓    ▓");
+            Console.WriteLine("      ▓      ▓");
+            Console.WriteLine("     ▓   ▓▓   ▓");
+            Console.WriteLine("    ▓   ▓  ▓   ▓");
+            Console.WriteLine("   ▓   ▓    ▓   ▓");
+            Console.WriteLine("  ▓   ▓      ▓   ▓");
+            Console.WriteLine(" ▓   ▓   ▓▓   ▓   ▓");
+            Console.WriteLine(" ▓   ▓   ▓▓   ▓   ▓");
+            Console.WriteLine("  ▓   ▓      ▓   ▓");
+            Console.WriteLine("   ▓   ▓    ▓   ▓");
+            Console.WriteLine("    ▓   ▓  ▓   ▓");
+            Console.WriteLine("     ▓   ▓▓   ▓");
+            Console.WriteLine("      ▓      ▓");
+            Console.WriteLine("       ▓    ▓");
+            Console.WriteLine("        ▓  ▓");
+            Console.WriteLine("         ▓▓");
+            Console.WriteLine("");
+            Thread.Sleep(50);
+            Console.Clear();
+
+            Console.WriteLine("         ▓▓");
+            Console.WriteLine("        ▓  ▓");
+            Console.WriteLine("       ▓    ▓");
+            Console.WriteLine("      ▓      ▓");
+            Console.WriteLine("     ▓   ▓▓   ▓");
+            Console.WriteLine("    ▓   ▓  ▓   ▓");
+            Console.WriteLine("   ▓   ▓    ▓   ▓");
+            Console.WriteLine("  ▓   ▓      ▓   ▓");
+            Console.WriteLine(" ▓   ▓   ▓▓   ▓   ▓");
+            Console.WriteLine("▓   ▓   ▓  ▓   ▓   ▓");
+            Console.WriteLine("▓   ▓   ▓  ▓   ▓   ▓");
+            Console.WriteLine(" ▓   ▓   ▓▓   ▓   ▓");
+            Console.WriteLine("  ▓   ▓      ▓   ▓");
+            Console.WriteLine("   ▓   ▓    ▓   ▓");
+            Console.WriteLine("    ▓   ▓  ▓   ▓");
+            Console.WriteLine("     ▓   ▓▓   ▓");
+            Console.WriteLine("      ▓      ▓");
+            Console.WriteLine("       ▓    ▓");
+            Console.WriteLine("        ▓  ▓");
+            Console.WriteLine("         ▓▓");
+            Thread.Sleep(50);
+            Console.Clear();
+
+            Console.WriteLine("        ▓  ▓");
+            Console.WriteLine("       ▓    ▓");
+            Console.WriteLine("      ▓      ▓");
+            Console.WriteLine("     ▓   ▓▓   ▓");
+            Console.WriteLine("    ▓   ▓  ▓   ▓");
+            Console.WriteLine("   ▓   ▓    ▓   ▓");
+            Console.WriteLine("  ▓   ▓      ▓   ▓");
+            Console.WriteLine(" ▓   ▓   ▓▓   ▓   ▓");
+            Console.WriteLine("▓   ▓   ▓  ▓   ▓   ▓");
+            Console.WriteLine("   ▓   ▓    ▓   ▓   ");
+            Console.WriteLine("   ▓   ▓    ▓   ▓   ");
+            Console.WriteLine("▓   ▓   ▓  ▓   ▓   ▓");
+            Console.WriteLine(" ▓   ▓   ▓▓   ▓   ▓");
+            Console.WriteLine("  ▓   ▓      ▓   ▓");
+            Console.WriteLine("   ▓   ▓    ▓   ▓");
+            Console.WriteLine("    ▓   ▓  ▓   ▓");
+            Console.WriteLine("     ▓   ▓▓   ▓");
+            Console.WriteLine("      ▓      ▓");
+            Console.WriteLine("       ▓    ▓");
+            Console.WriteLine("        ▓  ▓");
+            Thread.Sleep(50);
+            Console.Clear();
+
+            Console.WriteLine("       ▓    ▓");
+            Console.WriteLine("      ▓      ▓");
+            Console.WriteLine("     ▓   ▓▓   ▓");
+            Console.WriteLine("    ▓   ▓  ▓   ▓");
+            Console.WriteLine("   ▓   ▓    ▓   ▓");
+            Console.WriteLine("  ▓   ▓      ▓   ▓");
+            Console.WriteLine(" ▓   ▓   ▓▓   ▓   ▓");
+            Console.WriteLine("▓   ▓   ▓  ▓   ▓   ▓");
+            Console.WriteLine("   ▓   ▓    ▓   ▓   ");
+            Console.WriteLine("  ▓   ▓      ▓   ▓   ");
+            Console.WriteLine("  ▓   ▓      ▓   ▓   ");
+            Console.WriteLine("   ▓   ▓    ▓   ▓   ▓");
+            Console.WriteLine("▓   ▓   ▓  ▓   ▓   ▓");
+            Console.WriteLine(" ▓   ▓   ▓▓   ▓   ▓");
+            Console.WriteLine("  ▓   ▓      ▓   ▓");
+            Console.WriteLine("   ▓   ▓    ▓   ▓");
+            Console.WriteLine("    ▓   ▓  ▓   ▓");
+            Console.WriteLine("     ▓   ▓▓   ▓");
+            Console.WriteLine("      ▓      ▓");
+            Console.WriteLine("       ▓    ▓");
+            Thread.Sleep(50);
+            Console.Clear();
+        }
+
+        public static void DoubleAttackAnimation()
+        {
+            AttackAnimation();
+            AttackAnimation();
+        }
+
+        public static void SneakAttackAnimation()
+        {
+            string[] frames =
+                {
+                   "             \\/",
+
+                   "              | |" +
+                   "             \\/",
+
+
+                   "              | |" +
+                   "             | |" +
+                   "            \\/",
+
+                   "              | |" +
+                   "             | |" +
+                   "            | |" +
+                   "           \\/",
+
+                   "              | |" +
+                   "             | |" +
+                   "            | |" +
+                   "           \\/",
+
+                   "              | |" +
+                   "              | |" +
+                   "             | |" +
+                   "            | |" +
+                   "           \\/",
+
+                   "            o-| |-o" +
+                   "              | |" +
+                   "              | |" +
+                   "             | |" +
+                   "            | |" +
+                   "           \\/" +
+                   "           (0)",
+
+                   "               |" +
+                   "            o-| |-o" +
+                   "              | |" +
+                   "              | |" +
+                   "             | |" +
+                   "            | |" +
+                   "          (\\/)",
+
+                   "               o" +
+                   "               |" +
+                   "            o-| |-o" +
+                   "              | |" +
+                   "              | |" +
+                   "             | |" +
+                   "            (| |)"
+
+                };
+            foreach (string frame in frames)
+            {
+                Console.Clear();
+                Console.WriteLine(frame);
+                System.Threading.Thread.Sleep(100);
+            }
+        }
     }
 }
