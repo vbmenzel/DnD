@@ -93,12 +93,6 @@ public abstract class Character : IDamageable
                 canTarget: target => !target.IsDefeated && target.HP < target.MaxHP));
         }
 
-        actions.Add(new CombatAction(
-            "Pass turn",
-            CombatTargetType.Self,
-            false,
-            _ => Game.GameLogger.Log($"{Name} passes their turn.")));
-
         return actions;
     }
 
