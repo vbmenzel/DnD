@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -602,6 +603,114 @@ namespace DnD.Game
                 Console.WriteLine(frame);
                 System.Threading.Thread.Sleep(100);
             }
+        }
+
+        public static void MissAnimation()
+        {
+            string[] frames =
+                {
+                "   " +
+                   "\n   M   M   I    SSS    SSS" +
+                   "\n   MM MM   I   SS     SS" +
+                   "\n   M M M   I     SS     SS" +
+                   "\n   M   M   I   SSS    SSS",
+
+                   "   M" +
+                   "\n   M   M   I    SSS    SSS" +
+                   "\n   MM MM   I   SS     SS" +
+                   "\n   M M M   I     SS     SS" +
+                   "\n       M   I   SSS    SSS",
+
+                   "   M" +
+                   "\n   MM  M   I    SSS    SSS" +
+                   "\n   M  MM   I   SS     SS" +
+                   "\n   M M M   I     SS     SS" +
+                   "\n       M   I   SSS    SSS",
+
+                "   M" +
+                   "\n   MM  M   I    SSS    SSS" +
+                   "\n   M MMM   I   SS     SS" +
+                   "\n   M   M   I     SS     SS" +
+                   "\n       M   I   SSS    SSS",
+
+                "   M" +
+                   "\n   MM MM   I    SSS    SSS" +
+                   "\n   M M M   I   SS     SS" +
+                   "\n   M   M   I     SS     SS" +
+                   "\n       M   I   SSS    SSS",
+
+                "       M" +
+                   "\n   MM MM   I    SSS    SSS" +
+                   "\n   M M M   I   SS     SS" +
+                   "\n   M   M   I     SS     SS" +
+                   "\n   M       I   SSS    SSS",
+
+                "       M   I" +
+                   "\n   M  MM   I    SSS    SSS" +
+                   "\n   MMM M   I   SS     SS" +
+                   "\n   M   M   I     SS     SS" +
+                   "\n   M           SSS    SSS",
+
+                "       M   I   " +
+                   "\n   M  MM   I   SSSS    SSS" +
+                   "\n   MM  M   I    S     SS" +
+                   "\n   M M M   I   S SS     SS" +
+                   "\n   M            SS    SSS",
+
+                "       M   I    S" +
+                   "\n   M   M   I   SSSS    SSS" +
+                   "\n   MM MM   I          SS" +
+                   "\n   M M M   I   SSSS     SS" +
+                   "\n   M             S    SSS",
+
+                "           I    SS" +
+                   "\n   M   M   I   SS S    SSS" +
+                   "\n   MM MM   I     S    SS" +
+                   "\n   M M M   I   SSSS     SS" +
+                   "\n   M   M              SSS",
+
+                "                SSS" +
+                   "\n   M   M   I   SS      SSS" +
+                   "\n   MM MM   I     SS   SS" +
+                   "\n   M M M   I   SSS      SS" +
+                   "\n   M   M   I          SSS",
+
+                "                SSS   " +
+                   "\n   M   M   I    S     SSSS" +
+                   "\n   MM MM   I   S SS    S" +
+                   "\n   M M M   I    SS    S SS" +
+                   "\n   M   M   I   S       SS",
+
+                "                 SS    S" +
+                   "\n   M   M   I    S     SSSS" +
+                   "\n   MM MM   I   SSSS     " +
+                   "\n   M M M   I     S    SSSS" +
+                   "\n   M   M   I   SS       S",
+
+                "                  S    SS" +
+                   "\n   M   M   I    SS    SS S" +
+                   "\n   MM MM   I   SS S     S" +
+                   "\n   M M M   I     S    SSSS" +
+                   "\n   M   M   I   SSS       ",
+
+                "                       SSS" +
+                   "\n   M   M   I    SSS   SS  " +
+                   "\n   MM MM   I   SS       SS" +
+                   "\n   M M M   I     SS   SSS" +
+                   "\n   M   M   I   SSS       "
+            };
+            foreach (string frame in frames)
+            {
+                Console.Clear();
+                Console.WriteLine(frame);
+                System.Threading.Thread.Sleep(50);
+            }
+
+
+
+
+
+
         }
     }
 }

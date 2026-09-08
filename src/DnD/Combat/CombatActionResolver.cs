@@ -61,6 +61,7 @@ internal sealed class CombatActionResolver
             DisplayDefeatIfNeeded(target);
             return;
         }
+       
 
         int roll = _diceRoller.Roll(_attackDieSides);
         long attackScore = (long)roll + attacker.Level + action.AttackRollModifier;
@@ -90,6 +91,8 @@ internal sealed class CombatActionResolver
             return;
         }
 
+        Game.Animation.MissAnimation();
+        Console.Clear();
         Game.GameLogger.Log(
             $"{attacker.Name} missed {target.Name} with {action.Name}.");
     }
