@@ -173,9 +173,20 @@ public class Encounter
     /// <returns>The actions that the character can currently perform.</returns>
     private IReadOnlyList<CombatAction> GetUsableActions(Character character)
     {
-        return character.GetCombatActions()
+        var actions = character.GetCombatActions()
             .Where(action => GetValidTargets(character, action).Count > 0)
             .ToList();
+
+        if (actions.Count > 0)
+        {
+            actions.Add(new CombatAction(
+                "Pass turn",
+                CombatTargetType.Self,
+                false,
+                _ => Game.GameLogger.Log($"{character.Name} passes their turn.")));
+        }
+
+        return actions;
     }
 
     /// <summary>
