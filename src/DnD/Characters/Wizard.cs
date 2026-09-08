@@ -76,6 +76,8 @@ public class Wizard : Character, ISpellcaster
             0);
 
         target.TakeDamage(damage);
+        Game.Animation.SpellAnimation();
+        Console.Clear();
         Game.GameLogger.Log(
             $"{Name} casts a spell on {target} for {damage} damage!");
     }
